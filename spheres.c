@@ -1,35 +1,46 @@
 #include "spheres.h"
 
 
-void spherePos(vec2 *currPos, GLfloat vel) 
+void spherePos(sphere *allSpheres, GLfloat vel) 
 {
 
     double dt = 0.1;
-    currPos->x += vel*dt;
-    currPos->y += vel*dt;
+    for (int i = 0; i < 10; i++) {
+        allSpheres[i].position.x += drand48()*vel*dt;
+        allSpheres[i].position.y += drand48()*vel*dt;
+    }
     
 }
 
-void drawSphere(vec2 currPos, GLboolean isLarge) 
+void drawSphere(sphere *allSpheres)
 {
-    
-    int radius;
-    if (isLarge) {
-        radius = 1.5;
-        glColor3f(1.0,0.0,0.0);
+    int i = 0;
+    for (i = 0; i < 10; i++) {
+        glColor3f(allSpheres[i].color[0], allSpheres[i].color[1], allSpheres[i].color[2]);
+        glTranslatef(allSpheres[i].position.x, allSpheres[i].position.y, 0);
+        gluDisk(gluNewQuadric(), 0.0, allSpheres[i].radius, 20, 10);
+        glTranslatef(-allSpheres[i].position.x, -allSpheres[i].position.y, 0);
     }
-    else {
-        radius = 0.5;
-        glColor3f(1.0,1.0,1.0);
-    }
-    glTranslatef(currPos.x, currPos.y ,0);
-    gluDisk(gluNewQuadric(), 0.0, 2.0, 20, 10);
-    glTranslatef(-currPos.x, -currPos.y, 0);
 }
 
-vec2 initializeSphere()
+sphere *initializeSphere(int numSpheres)
 {
-    vec2 sphere;
-    sphere.x = 0; sphere.y = 0;
-    return sphere;
+    int i;
+    sphere *spheresGL = (sphere *)malloc(sizeof(sphere)*numSpheres);
+
+    spheresGL[0].color[0] = 1.0;
+    spheresGL[0].radius = 2;
+
+    for (i=1; i < numSpheres; i++) {
+        spheresGL[i].color[0] = 1.0;
+        spheresGL[i].color[1] = 1.0;
+        spheresGL[i].color[2] = 1.0;
+
+        spheresGL[i].radius = 0.5;
+        spheresGL[i].position.x = (float) drand48() * 30;
+        spheresGL[i].position.y = (float) drand48() * 30;
+    }
+
+    return spheresGL;
+
 }

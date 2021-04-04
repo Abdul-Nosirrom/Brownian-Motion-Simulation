@@ -6,28 +6,21 @@
 
 #include "spheres.h"
 
-#define LENGTH 20.0
-#define HEIGHT 10.0
+#define LENGTH 50.0
+#define HEIGHT 50.0
 
+sphere *allSpheres;
 
 /* Does the job */
 void display(void)
 {
-    static vec2 bigSphere;
-    static vec2 smallSphere;
-    printf("%lf %lf\n", bigSphere.x, bigSphere.y);
-
-    //static float theta=20;
-    //static float theta=0;
-    //static float dtheta=0.1; 
+ 
     glClear(GL_COLOR_BUFFER_BIT); //
     glPushMatrix();  
     //glRotatef(theta,0,0,1); 
 
-    drawSphere(bigSphere, GL_TRUE);
-    spherePos(&bigSphere, 0.5);
-    drawSphere(smallSphere, GL_FALSE);
-    spherePos(&smallSphere, 0.1);
+    drawSphere(allSpheres);
+    spherePos(allSpheres, 0.5);
 
 
     glFlush();                    // Flush buffer handeled by GL
@@ -44,6 +37,8 @@ void reshape(int w, int h)
 
 int main(int argc, char *argv[])
 {
+
+  allSpheres = initializeSphere(10);
   /* 
    * Using GL Utilities (glut) 
    *

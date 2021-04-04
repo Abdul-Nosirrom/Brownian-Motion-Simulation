@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -10,8 +11,19 @@ typedef struct vector2 {
     GLfloat y;
 } vec2;
 
-void spherePos(vec2 *currPos, GLfloat vel);
+typedef struct color {
+    GLfloat r;
+    GLfloat g;
+} color;
 
-void drawSphere(vec2 currPos, GLboolean isLarge);
+typedef struct sphere {
+    vec2 position;
+    GLfloat radius;
+    GLfloat color[3];
+} sphere;
 
-vec2 initializeSphere();
+void spherePos(sphere *, GLfloat vel);
+
+void drawSphere(sphere *);
+
+sphere* initializeSphere(int numSpheres);
