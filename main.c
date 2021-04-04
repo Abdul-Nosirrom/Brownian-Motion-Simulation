@@ -6,9 +6,6 @@
 
 #include "spheres.h"
 
-#define LENGTH 50.0
-#define HEIGHT 50.0
-
 sphere *allSpheres;
 
 /* Does the job */
@@ -20,7 +17,7 @@ void display(void)
     //glRotatef(theta,0,0,1); 
 
     drawSphere(allSpheres);
-    spherePos(allSpheres, 0.5);
+    spherePos(allSpheres, 1);
 
 
     glFlush();                    // Flush buffer handeled by GL
@@ -38,7 +35,7 @@ void reshape(int w, int h)
 int main(int argc, char *argv[])
 {
 
-  allSpheres = initializeSphere(100);
+  allSpheres = initializeSphere(1000);
   /* 
    * Using GL Utilities (glut) 
    *

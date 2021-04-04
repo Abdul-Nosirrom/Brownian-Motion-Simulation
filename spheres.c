@@ -2,13 +2,42 @@
 
 int sphereTotal;
 
+int isCollide(vec2 curPos)
+{
+    if ((abs(curPos.x) >= LENGTH) && (abs(curPos.y) >= HEIGHT))
+        return BOTH_COLLIDE;
+    else if ((abs(curPos.x) >= LENGTH) && !( abs(curPos.y) >= HEIGHT))
+        return HOR_COLLIDE;
+    else if ((abs(curPos.x) >= LENGTH) && ! (abs(curPos.y) >= HEIGHT))
+        return VERT_COLLIDE;
+
+    return 0;
+}
+
 void spherePos(sphere *allSpheres, GLfloat vel) 
 {
 
     double dt = 0.5;
     for (int i = 0; i < sphereTotal; i++) {
-        allSpheres[i].position.x += (-1 + 2*drand48())*vel*dt;
-        allSpheres[i].position.y += (-1 + 2*drand48())*vel*dt;
+        if ((isCollide(allSpheres[i].position) & BOTH_COLLIDE)) {
+            printf("COLLISION");
+            allSpheres[i].position.x += -1*allSpheres[i].velocity.x*dt;
+            allSpheres[i].position.y += -1*allSpheres[i].velocity.y*dt;
+        }
+        else if ((isCollide(allSpheres[i].position) & HOR_COLLIDE)) {
+            allSpheres[i].position.x += -1*allSpheres[i].velocity.x*dt;
+            allSpheres[i].position.y += allSpheres[i].velocity.y*dt;
+        }
+        else if ((isCollide(allSpheres[i].position) & VERT_COLLIDE)) {
+            allSpheres[i].position.x += allSpheres[i].velocity.x*dt;
+            allSpheres[i].position.y += -1*allSpheres[i].velocity.y*dt;
+        }
+        else {
+            allSpheres[i].velocity.x = (-1 + 2*drand48())*vel;
+            allSpheres[i].velocity.y = (-1 + 2*drand48())*vel;
+            allSpheres[i].position.x += allSpheres[i].velocity.x*dt;
+            allSpheres[i].position.y += allSpheres[i].velocity.y*dt;
+        }
     }
     
 }
