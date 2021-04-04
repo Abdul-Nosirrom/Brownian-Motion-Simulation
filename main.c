@@ -7,31 +7,40 @@
 #define LENGTH 20.0
 #define HEIGHT 10.0
 
+void drawSphere(GLfloat x, GLfloat y, GLfloat z, GLboolean isLarge) 
+{
+    int radius;
+    if (isLarge) {
+        radius = 1.5;
+        glColor3f(1.0,0.0,0.0);
+    }
+    else {
+        radius = 0.5;
+        glColor3f(1.0,1.0,1.0);
+    }
+    glTranslatef(x,y,z);
+    gluDisk(gluNewQuadric(), 0.0, 2.0, 20, 10);
+    glTranslatef(-x,-y,-z);
+}
+
 /* Does the job */
 void display(void)
 {
   //static float theta=20;
-  static float theta=0;
-  static float dtheta=0.1; 
+  //static float theta=0;
+  //static float dtheta=0.1; 
   glClear(GL_COLOR_BUFFER_BIT); //
   glPushMatrix();  
-  glRotatef(theta,0,0,1); 
-  glBegin(GL_LINE_STRIP);       // Always GL Begin, then GL End below, we're drawing lines as specified
-  glColor3f(1.0, 0.0, 0.0);     // Color values for the line
-  glVertex2f(9.0, 0.0);         // Then place that line starting at a vertex (coordinates from screen size below)
-  glColor3f(1.0, 1.0, 0.0);
-  glVertex2f(0.0, 3.0);
-  glColor3f(0.0, 1.0, 0.0);
-  glVertex2f(-9.0, 0.0);
-  glColor3f(0.0, 0.0, 1.0);
-  glVertex2f(0.0, -3.0);
-  glColor3f(1.0, 0.0, 1.0);
-  glVertex2f(9.0, 0.0);         // Returning to Initial vertex after setting up other vertices
-  glEnd();
+  //glRotatef(theta,0,0,1); 
+
+  drawSphere(2, 5 ,0, GL_TRUE);
+
+  drawSphere(-3, -1, 0, GL_FALSE);
+
   glFlush();                    // Flush buffer handeled by GL
   glutSwapBuffers();            // Swap with buffer displayed (remember the double buffering)
   glPopMatrix();  
-  theta+=dtheta; 
+  //theta+=dtheta; 
 }
 
 /* Called from main() with size of a window (w,h) */
