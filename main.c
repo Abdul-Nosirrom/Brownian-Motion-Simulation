@@ -38,7 +38,7 @@ void reshape(int w, int h)
 int main(int argc, char *argv[])
 {
 
-  allSpheres = initializeSphere(10);
+  allSpheres = initializeSphere(100);
   /* 
    * Using GL Utilities (glut) 
    *
@@ -64,5 +64,8 @@ int main(int argc, char *argv[])
   glutDisplayFunc(display);
   glutIdleFunc(display);  
   glutMainLoop();                               // You know this from working with UI on the alarm clock
+
+  free(allSpheres);
+  allSpheres = NULL;
   return 0;   
 }

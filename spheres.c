@@ -1,13 +1,14 @@
 #include "spheres.h"
 
+int sphereTotal;
 
 void spherePos(sphere *allSpheres, GLfloat vel) 
 {
 
-    double dt = 0.1;
-    for (int i = 0; i < 10; i++) {
-        allSpheres[i].position.x += drand48()*vel*dt;
-        allSpheres[i].position.y += drand48()*vel*dt;
+    double dt = 0.5;
+    for (int i = 0; i < sphereTotal; i++) {
+        allSpheres[i].position.x += (-1 + 2*drand48())*vel*dt;
+        allSpheres[i].position.y += (-1 + 2*drand48())*vel*dt;
     }
     
 }
@@ -15,7 +16,8 @@ void spherePos(sphere *allSpheres, GLfloat vel)
 void drawSphere(sphere *allSpheres)
 {
     int i = 0;
-    for (i = 0; i < 10; i++) {
+    
+    for (i = 0; i < sphereTotal; i++) {
         glColor3f(allSpheres[i].color[0], allSpheres[i].color[1], allSpheres[i].color[2]);
         glTranslatef(allSpheres[i].position.x, allSpheres[i].position.y, 0);
         gluDisk(gluNewQuadric(), 0.0, allSpheres[i].radius, 20, 10);
@@ -40,7 +42,7 @@ sphere *initializeSphere(int numSpheres)
         spheresGL[i].position.x = (float) drand48() * 30;
         spheresGL[i].position.y = (float) drand48() * 30;
     }
-
+    sphereTotal = numSpheres;
     return spheresGL;
 
 }
