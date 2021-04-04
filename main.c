@@ -7,6 +7,7 @@
 #include "spheres.h"
 
 sphere *allSpheres;
+LinkedList particleHistory;
 
 /* Does the job */
 void display(void)
@@ -17,7 +18,8 @@ void display(void)
     //glRotatef(theta,0,0,1); 
 
     drawSphere(allSpheres);
-    spherePos(allSpheres, 1);
+    spherePos(allSpheres, 1, particleHistory);
+    draw_path(&particleHistory);
 
 
     glFlush();                    // Flush buffer handeled by GL
@@ -34,6 +36,7 @@ void reshape(int w, int h)
 
 int main(int argc, char *argv[])
 {
+    particleHistory = initialize_list();
     int numSpheres;
     printf("Input the number of particles:  ");
     scanf("%d", &numSpheres);
@@ -66,6 +69,7 @@ int main(int argc, char *argv[])
     glutMainLoop();                               // You know this from working with UI on the alarm clock
 
     free(allSpheres);
+    destroy_list(&particleHistory);
     allSpheres = NULL;
     return 0;   
 }

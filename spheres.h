@@ -6,6 +6,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
+#include <math.h>
+#include "linkedlist.h"
 
 #define LENGTH 50.0
 #define HEIGHT 50.0
@@ -13,11 +15,6 @@
 #define VERT_COLLIDE 1
 #define HOR_COLLIDE 2
 #define BOTH_COLLIDE 4
-
-typedef struct vector2 {
-    GLfloat x;
-    GLfloat y;
-} vec2;
 
 typedef struct color {
     GLfloat r;
@@ -31,7 +28,8 @@ typedef struct sphere {
     GLfloat color[3];
 } sphere;
 
-void spherePos(sphere *, GLfloat vel);
+
+void spherePos(sphere *, GLfloat vel, LinkedList);
 
 void drawSphere(sphere *);
 

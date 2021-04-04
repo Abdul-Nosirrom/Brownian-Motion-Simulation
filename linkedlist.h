@@ -6,7 +6,10 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 
-#include "spheres.h"
+typedef struct vector2 {
+    GLfloat x;
+    GLfloat y;
+} vec2;
 
 typedef struct Node {
     vec2 pos;
@@ -18,9 +21,8 @@ typedef struct LinkedList {
     Node* head;
 } LinkedList;
 
-LinkedList particleHistory;
-
 LinkedList initialize_list();
-void draw_path();
-void add_position(LinkedList, vec2);
-void destroy_list(LinkedList);
+void draw_path(LinkedList*);
+void add_position(LinkedList*, vec2);
+void destroy_list(LinkedList*);
+

@@ -4,20 +4,22 @@ int sphereTotal;
 
 int isCollide(vec2 curPos)
 {
-    if ((abs(curPos.x) >= LENGTH) && (abs(curPos.y) >= HEIGHT))
+    if ((fabs(curPos.x) >= LENGTH) && (fabs(curPos.y) >= HEIGHT))
         return BOTH_COLLIDE;
-    else if ((abs(curPos.x) >= LENGTH) && !( abs(curPos.y) >= HEIGHT))
+    else if ((fabs(curPos.x) >= LENGTH) && !( fabs(curPos.y) >= HEIGHT))
         return HOR_COLLIDE;
-    else if ((abs(curPos.x) >= LENGTH) && ! (abs(curPos.y) >= HEIGHT))
+    else if ((fabs(curPos.x) >= LENGTH) && ! (fabs(curPos.y) >= HEIGHT))
         return VERT_COLLIDE;
 
     return 0;
 }
 
-void spherePos(sphere *allSpheres, GLfloat vel) 
+void spherePos(sphere *allSpheres, GLfloat vel, LinkedList particleHistory) 
 {
 
     double dt = 0.5;
+    add_position(&particleHistory, allSpheres[0].position);
+
     for (int i = 0; i < sphereTotal; i++) {
         if ((isCollide(allSpheres[i].position) & BOTH_COLLIDE)) {
             printf("COLLISION");
@@ -39,6 +41,7 @@ void spherePos(sphere *allSpheres, GLfloat vel)
             allSpheres[i].position.y += allSpheres[i].velocity.y*dt;
         }
     }
+    
     
 }
 
