@@ -7,8 +7,23 @@
 #define LENGTH 20.0
 #define HEIGHT 10.0
 
-void drawSphere(GLfloat x, GLfloat y, GLfloat z, GLboolean isLarge) 
+typedef struct vector2 {
+    GLfloat x;
+    GLfloat y;
+} vec2;
+
+
+void spherePos(vec2 *currPos, GLfloat vel) 
 {
+    double dt = 0.1;
+    currPos->x += vel*dt;
+    currPos->y += vel*dt;
+    
+}
+
+void drawSphere(vec2 currPos, GLboolean isLarge) 
+{
+    
     int radius;
     if (isLarge) {
         radius = 1.5;
@@ -18,29 +33,39 @@ void drawSphere(GLfloat x, GLfloat y, GLfloat z, GLboolean isLarge)
         radius = 0.5;
         glColor3f(1.0,1.0,1.0);
     }
-    glTranslatef(x,y,z);
+    glTranslatef(currPos.x, currPos.y ,0);
     gluDisk(gluNewQuadric(), 0.0, 2.0, 20, 10);
-    glTranslatef(-x,-y,-z);
+    glTranslatef(-currPos.x, -currPos.y, 0);
+}
+
+vec2 initializeSphere()
+{
+    vec2 sphere;
+    sphere.x = 0; sphere.y = 0;
+    return sphere;
 }
 
 /* Does the job */
 void display(void)
 {
-  //static float theta=20;
-  //static float theta=0;
-  //static float dtheta=0.1; 
-  glClear(GL_COLOR_BUFFER_BIT); //
-  glPushMatrix();  
-  //glRotatef(theta,0,0,1); 
+    static vec2 bigSphere;
+    printf("%lf %lf\n", bigSphere.x, bigSphere.y);
 
-  drawSphere(2, 5 ,0, GL_TRUE);
+    //static float theta=20;
+    //static float theta=0;
+    //static float dtheta=0.1; 
+    glClear(GL_COLOR_BUFFER_BIT); //
+    glPushMatrix();  
+    //glRotatef(theta,0,0,1); 
 
-  drawSphere(-3, -1, 0, GL_FALSE);
+    drawSphere(bigSphere, GL_TRUE);
+    spherePos(&bigSphere, 0.5);
 
-  glFlush();                    // Flush buffer handeled by GL
-  glutSwapBuffers();            // Swap with buffer displayed (remember the double buffering)
-  glPopMatrix();  
-  //theta+=dtheta; 
+
+    glFlush();                    // Flush buffer handeled by GL
+    glutSwapBuffers();            // Swap with buffer displayed (remember the double buffering)
+    glPopMatrix();  
+    //theta+=dtheta; 
 }
 
 /* Called from main() with size of a window (w,h) */
