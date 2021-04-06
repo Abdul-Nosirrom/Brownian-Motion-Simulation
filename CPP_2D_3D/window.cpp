@@ -9,6 +9,31 @@ void timer( int value )
     glutPostRedisplay();
 }
 
+void Window::draw_spheres2D(std::vector<Sphere> allSpheres)
+{
+    int i = 0;
+    
+    for (i = 0; i < allSpheres.size(); i++) {
+        glColor3f(allSpheres[i].m_color.r, allSpheres[i].m_color.g, allSpheres[i].m_color.b);
+        glTranslatef(allSpheres[i].m_position.x, allSpheres[i].m_position.y, 0);
+        gluDisk(gluNewQuadric(), 0.0, allSpheres[i].m_radius, 20, 10);
+        glTranslatef(-allSpheres[i].m_position.x, -allSpheres[i].m_position.y, 0);
+    }
+}
+
+void Window::draw_spheres3D(std::vector<Sphere> allSpheres)
+{
+    int i = 0;
+    
+    for (i = 0; i < allSpheres.size(); i++) {
+        glColor3f(allSpheres[i].m_color.r, allSpheres[i].m_color.g, allSpheres[i].m_color.b);
+        glTranslatef(allSpheres[i].m_position.x, allSpheres[i].m_position.y, allSpheres[i].m_position.z);
+        //gluSphere(gluNewQuadric(), allSpheres[i].m_radius, 20, 10);
+        glutSolidSphere(allSpheres[i].m_radius, 20, 10);
+        glTranslatef(-allSpheres[i].m_position.x, -allSpheres[i].m_position.y, allSpheres[i].m_position.z);
+    }
+}
+
 Window::Window(bool is3D)
 {
 
