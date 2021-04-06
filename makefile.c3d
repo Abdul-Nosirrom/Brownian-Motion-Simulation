@@ -1,0 +1,7 @@
+CC = gcc
+Lib = -lm -lGL -lGLU -lglut
+GDB = -g -Wall -Wextra
+SRCDIR = ./C_3D
+
+./brown3d: $(SRCDIR)/main.c
+	$(CC) $(SRCDIR)/main.c $(SRCDIR)/spheres.c $(SRCDIR)/linkedlist.c -o brown3d $(Lib) $(GDB)
