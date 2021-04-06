@@ -8,6 +8,7 @@
 #include <GL/glut.h>
 #include <math.h>
 #include "linkedlist.h"
+#include "brownian.h"
 
 #define LENGTH 50.0
 #define HEIGHT 50.0
