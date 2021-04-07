@@ -7,12 +7,11 @@
 #include <GL/glut.h>
 #include <math.h>
 #include <vector>
+#include <memory>
 
 #include "datastructures.h"
 
-#define BORDERS 50
-
-std::vector<Sphere> initialize_spheres(int numSpheres);
+#define BORDERS 10
 
 typedef struct color {
     GLfloat r;
@@ -34,5 +33,9 @@ class Sphere
         Sphere(GLfloat newRadius, color newColor);
         Sphere(GLfloat newRadius, color newColor, vec3 initPos);
         void draw_sphere();
+        ~Sphere();
 
 };
+
+//std::vector<Sphere> initialize_spheres(int numSpheres);
+void initialize_spheres(std::vector<Sphere>&, int numSpheres, bool is3D);

@@ -11,8 +11,8 @@ void timer( int value )
 
 void Window::generate_spheres(int numSpheres)
 {
-    //m_Spheres.resize(numSpheres);
-    initialize_spheres(m_Spheres);
+    m_Spheres.reserve(numSpheres);
+    initialize_spheres(m_Spheres, numSpheres, is3D);
 }
 
 void Window::draw_spheres2D()

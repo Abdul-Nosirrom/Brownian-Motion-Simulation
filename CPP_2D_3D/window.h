@@ -4,9 +4,10 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <vector>
+#include <memory>
 
 #include "spheres.h"
-#include "datastructures.h"
+//#include "datastructures.h"
 
 #define LENGTH 50.0
 #define HEIGHT 50.0
@@ -15,10 +16,19 @@ void timer();
 
 class Window 
 {
-    void draw_axes();
+    bool is3D;
+    //std::vector<std::unique_ptr<Sphere>> ptr_Spheres;
+    //int spheresRendered;
+
+    public:
+        std::vector<Sphere> m_Spheres;
 
     public:
         Window(bool);
+
+        Window(bool, int);
+
+        void generate_spheres(int);
 
         void reshape(int, int);
 
@@ -26,10 +36,14 @@ class Window
 
         void display3D();
 
-        void draw_spheres2D(std::vector<Sphere>);
-
-        void draw_spheres3D(std::vector<Sphere>);
-
-
         ~Window();
+
+    private:
+        void draw_spheres2D();
+
+        void draw_spheres3D();
+
+        void draw_axes();
+
+
 };
