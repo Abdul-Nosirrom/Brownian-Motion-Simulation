@@ -16,29 +16,36 @@ int isCollide(vec2 curPos)
 
 void spherePos(sphere *allSpheres, GLfloat vel, LinkedList particleHistory) 
 {
-
+    static double totalTime = 0.0;
+    double dx;
+    double dy;
     double dt = 0.5;
     add_position(&particleHistory, allSpheres[0].position);
-
+    totalTime += dt;
     for (int i = 0; i < sphereTotal; i++) {
+
+        dx = sqrt(dt) * rand_normal(0.0, 0.76);
+        dy = sqrt(dt) * rand_normal(0.0, 0.76);
+
+
         if ((isCollide(allSpheres[i].position) & BOTH_COLLIDE)) {
             printf("COLLISION");
-            allSpheres[i].position.x += -1*allSpheres[i].velocity.x*dt;
-            allSpheres[i].position.y += -1*allSpheres[i].velocity.y*dt;
+            allSpheres[i].position.x += dx;
+            allSpheres[i].position.y += dy;
         }
         else if ((isCollide(allSpheres[i].position) & HOR_COLLIDE)) {
-            allSpheres[i].position.x += -1*allSpheres[i].velocity.x*dt;
-            allSpheres[i].position.y += allSpheres[i].velocity.y*dt;
+            allSpheres[i].position.x += dx;
+            allSpheres[i].position.y += dy;
         }
         else if ((isCollide(allSpheres[i].position) & VERT_COLLIDE)) {
-            allSpheres[i].position.x += allSpheres[i].velocity.x*dt;
-            allSpheres[i].position.y += -1*allSpheres[i].velocity.y*dt;
+            allSpheres[i].position.x += dx;
+            allSpheres[i].position.y += dy;
         }
         else {
             allSpheres[i].velocity.x = (-1 + 2*drand48())*vel;
             allSpheres[i].velocity.y = (-1 + 2*drand48())*vel;
-            allSpheres[i].position.x += allSpheres[i].velocity.x*dt;
-            allSpheres[i].position.y += allSpheres[i].velocity.y*dt;
+            allSpheres[i].position.x +=dx;
+            allSpheres[i].position.y +=dy;
         }
     }
     
@@ -59,6 +66,7 @@ void drawSphere(sphere *allSpheres)
 
 sphere *initializeSphere(int numSpheres)
 {
+    generate_data();
     int i;
     sphere *spheresGL = (sphere *)malloc(sizeof(sphere)*numSpheres);
 

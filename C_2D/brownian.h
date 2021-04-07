@@ -1,13 +1,11 @@
-#include <math.h>
-#include "linkedlist.h"
-#define DIMENSION 3
+#include<math.h>
+#include <stdlib.h>
+#include <stdio.h>
+//#define RAND_MAX 10
 
+//double RAND_MAX = 10.0;
 
-void brownian_displacement();
+double rand_normal(double, double);
+void generate_data();
 
-void interparticle_collision();
-
-vec2 rand_vec();
-
-double r8_normal(int *seed);
 

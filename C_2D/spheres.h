@@ -7,6 +7,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <math.h>
+
 #include "linkedlist.h"
 #include "brownian.h"
 
@@ -16,6 +17,7 @@
 #define VERT_COLLIDE 1
 #define HOR_COLLIDE 2
 #define BOTH_COLLIDE 4
+
 
 typedef struct color {
     GLfloat r;
@@ -35,5 +37,7 @@ void spherePos(sphere *, GLfloat vel, LinkedList);
 void drawSphere(sphere *);
 
 sphere* initializeSphere(int numSpheres);
+
+vec2 getPosition(sphere *);
 
 int isCollide(vec2);
