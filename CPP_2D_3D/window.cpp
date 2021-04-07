@@ -9,35 +9,42 @@ void timer( int value )
     glutPostRedisplay();
 }
 
-void Window::draw_spheres2D(std::vector<Sphere> allSpheres)
+void Window::generate_spheres(int numSpheres)
 {
-    int i = 0;
+    //m_Spheres.resize(numSpheres);
+    initialize_spheres(m_Spheres);
+}
+
+void Window::draw_spheres2D()
+{
+    long unsigned int i = 0;
     
-    for (i = 0; i < allSpheres.size(); i++) {
-        glColor3f(allSpheres[i].m_color.r, allSpheres[i].m_color.g, allSpheres[i].m_color.b);
-        glTranslatef(allSpheres[i].m_position.x, allSpheres[i].m_position.y, 0);
-        gluDisk(gluNewQuadric(), 0.0, allSpheres[i].m_radius, 20, 10);
-        glTranslatef(-allSpheres[i].m_position.x, -allSpheres[i].m_position.y, 0);
+    for (i = 0; i < m_Spheres.size(); i++) {
+        glColor3f(m_Spheres[i].m_color.r, m_Spheres[i].m_color.g, m_Spheres[i].m_color.b);
+        glTranslatef(m_Spheres[i].m_position.x, m_Spheres[i].m_position.y, 0);
+        gluDisk(gluNewQuadric(), 0.0, m_Spheres[i].m_radius, 20, 10);
+        glTranslatef(-m_Spheres[i].m_position.x, -m_Spheres[i].m_position.y, 0);
     }
 }
 
-void Window::draw_spheres3D(std::vector<Sphere> allSpheres)
+void Window::draw_spheres3D()
 {
-    int i = 0;
+    long unsigned int i = 0;
     
-    for (i = 0; i < allSpheres.size(); i++) {
-        glColor3f(allSpheres[i].m_color.r, allSpheres[i].m_color.g, allSpheres[i].m_color.b);
-        glTranslatef(allSpheres[i].m_position.x, allSpheres[i].m_position.y, allSpheres[i].m_position.z);
+    for (i = 0; i < m_Spheres.size(); i++) {
+        glColor3f(m_Spheres[i].m_color.r, m_Spheres[i].m_color.g, m_Spheres[i].m_color.b);
+        glTranslatef(m_Spheres[i].m_position.x, m_Spheres[i].m_position.y, m_Spheres[i].m_position.z);
         //gluSphere(gluNewQuadric(), allSpheres[i].m_radius, 20, 10);
-        glutSolidSphere(allSpheres[i].m_radius, 20, 10);
-        glTranslatef(-allSpheres[i].m_position.x, -allSpheres[i].m_position.y, allSpheres[i].m_position.z);
+        glutSolidSphere(m_Spheres[i].m_radius, 20, 10);
+        glTranslatef(-m_Spheres[i].m_position.x, -m_Spheres[i].m_position.y, m_Spheres[i].m_position.z);
     }
 }
 
-Window::Window(bool is3D)
+Window::Window(bool s_3D)
 {
+    is3D = s_3D;
 
-    if (is3D){
+    if (s_3D){
        glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
   
         glutInitWindowSize(800,600);
@@ -93,15 +100,10 @@ void Window::display()
     glPushMatrix();  
     //glRotatef(theta,0,0,1); 
 
-    //drawSphere(allSpheres);
-    //spherePos(allSpheres, 1, particleHistory);
-    //draw_path(&particleHistory);
-    glBegin(GL_LINE_STRIP);
-        glColor3f(1.0,0.0,0.0);
-        glVertex2f(1.0,0.0);
-        glVertex2f(0.0,1.0);
-        glVertex2f(0.0,0.0);
-    glEnd();
+    
+    this->draw_spheres2D();
+    // Update sphere position
+    // Draw path
 
 
     glFlush();                    // Flush buffer handeled by GL
@@ -144,6 +146,7 @@ void Window::display3D()
     glRotated(angle, 0, 0, 1);
 
     this->draw_axes();
+    this->draw_spheres3D();
 
 
     glFlush();                    // Flush buffer handeled by GL
