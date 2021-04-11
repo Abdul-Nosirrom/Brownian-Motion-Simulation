@@ -8,6 +8,7 @@ void initialize_spheres(std::vector<Sphere>& spheresGL, int numSpheres, bool is3
     color particleColor;
 
     if (!is3D) particleColor = {1.0,1.0,1.0};
+    else particleColor = {0.0, 0.0, 0.0};
 
     long unsigned int i;
     //Sphere *spheresGL = (sphere *)malloc(sizeof(sphere)*numSpheres);

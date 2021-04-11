@@ -26,16 +26,21 @@ int main(int argc, char *argv[])
 {
     int is3D;
     int numSpheres;
+    double dt;
     // Take User Input
     std::cout << "Simulate 3D (1) or 2D (0) ?" << std::endl;
     std::cin >> is3D;
     std::cout << "Enter number of particles in the system:" << std::endl;
     std::cin >> numSpheres;
+    std::cout << "Set a delta t value (default 0.1): " << std::endl;
+    std::cin >> dt;
+
     // Initialize window and openGL
     glutInit(&argc, argv);
     brownian = new Window(is3D);
     // Initialize particles
     brownian->generate_spheres(numSpheres);
+    brownian->set_deltaT(dt);
     
     glutReshapeFunc(reshape);
     if (is3D) {

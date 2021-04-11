@@ -34,10 +34,24 @@ void Window::draw_spheres3D()
     for (i = 0; i < m_Spheres.size(); i++) {
         glColor3f(m_Spheres[i].m_color.r, m_Spheres[i].m_color.g, m_Spheres[i].m_color.b);
         glTranslatef(m_Spheres[i].m_position.x, m_Spheres[i].m_position.y, m_Spheres[i].m_position.z);
-        //gluSphere(gluNewQuadric(), allSpheres[i].m_radius, 20, 10);
+        //gluSphere(gluNewQuadric(), m_Spheres[i].m_radius, 20, 10);
         glutSolidSphere(m_Spheres[i].m_radius, 20, 10);
         glTranslatef(-m_Spheres[i].m_position.x, -m_Spheres[i].m_position.y, m_Spheres[i].m_position.z);
     }
+}
+
+void Window::update_positions()
+{
+    long unsigned int i;
+
+    for (i=0; i < m_Spheres.size(); i++) {
+        brownian_sim(m_Spheres[i].m_position, dt);
+    }
+}
+
+void Window::set_deltaT(double new_dt)
+{
+    this->dt = new_dt;
 }
 
 Window::Window(bool s_3D)
@@ -103,6 +117,7 @@ void Window::display()
     
     this->draw_spheres2D();
     // Update sphere position
+    this->update_positions();
     // Draw path
 
 

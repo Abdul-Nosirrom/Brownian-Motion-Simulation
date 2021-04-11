@@ -14,11 +14,13 @@ void timer();
 class Window 
 {
     bool is3D;
+    double dt;
     //std::vector<std::unique_ptr<Sphere>> ptr_Spheres;
     //int spheresRendered;
 
     public:
         std::vector<Sphere> m_Spheres;
+        std::vector<vec3> m_path;
 
     public:
         Window(bool);
@@ -33,12 +35,18 @@ class Window
 
         void display3D();
 
+        void set_deltaT(double new_dt);
+
         ~Window();
 
     private:
         void draw_spheres2D();
 
         void draw_spheres3D();
+
+        void update_positions();
+
+        void draw_path();
 
         void draw_axes();
 

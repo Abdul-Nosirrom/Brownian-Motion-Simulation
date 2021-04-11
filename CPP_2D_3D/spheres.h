@@ -9,7 +9,8 @@
 #include <vector>
 #include <memory>
 
-#include "datastructures.h"
+//#include "datastructures.h"
+#include "browniansim.h"
 
 #define LENGTH 50
 #define HEIGHT 50
