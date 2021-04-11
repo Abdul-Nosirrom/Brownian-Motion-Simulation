@@ -1,4 +1,3 @@
-extern "C" void gaussian_(float *);
 #include "spheres.h"
 #include <iostream>
 
