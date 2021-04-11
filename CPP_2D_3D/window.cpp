@@ -30,25 +30,34 @@ void Window::draw_spheres2D()
 void Window::draw_spheres3D()
 {
     long unsigned int i = 0;
+    GLUquadric *quad;
     
     for (i = 0; i < m_Spheres.size(); i++) {
+        glPushMatrix();
         glColor3f(m_Spheres[i].m_color.r, m_Spheres[i].m_color.g, m_Spheres[i].m_color.b);
         glTranslatef(m_Spheres[i].m_position.x, m_Spheres[i].m_position.y, m_Spheres[i].m_position.z);
         //gluSphere(gluNewQuadric(), m_Spheres[i].m_radius, 20, 10);
-        glutSolidSphere(m_Spheres[i].m_radius, 20, 10);
-        glTranslatef(-m_Spheres[i].m_position.x, -m_Spheres[i].m_position.y, m_Spheres[i].m_position.z);
+        glutSolidSphere(m_Spheres[i].m_radius, 200, 10);
+        //glTranslatef(-m_Spheres[i].m_position.x, -m_Spheres[i].m_position.y, m_Spheres[i].m_position.z);
+        glPopMatrix();
     }
 }
 
 void Window::update_positions()
 {
+    float vel = 2;
     long unsigned int i;
 
-    for (i=0; i < m_Spheres.size(); i++) {
+    for (i=1; i < m_Spheres.size(); i++) {
         brownian_sim(m_Spheres[i].m_position, dt, is3D);
     }
+    m_Spheres[0].m_position.x += vel*dt;
+    m_Spheres[0].m_position.y += vel*dt;
+    m_Spheres[0].m_position.z += vel*dt;
 
-
+    std::cout << " x: " << m_Spheres[0].m_position.x;
+    std::cout << " y: " << m_Spheres[0].m_position.y;
+    std::cout << " z: " << m_Spheres[0].m_position.z << std::endl;
     m_path.push_back(m_Spheres[0].m_position);
 }
 
@@ -175,14 +184,23 @@ void Window::display3D()
 
     // Rotate Camera
     glRotated(angle, 0, 0, 1);
-
+    //glPopMatrix();
+    glPushMatrix();
     this->draw_axes();
+    //glPopMatrix();
     this->draw_spheres3D();
-
+        // Update sphere position
+    this->update_positions();
+    // Draw path
+    //glPopMatrix();
+    
+    //glPushMatrix();
+    this->draw_path();
+    glPopMatrix();
 
     glFlush();                    // Flush buffer handeled by GL
     glutSwapBuffers();            // Swap with buffer displayed (remember the double buffering)
-    glPopMatrix();  
+    //glPopMatrix();  
     //theta+=dtheta; 
 }
 
