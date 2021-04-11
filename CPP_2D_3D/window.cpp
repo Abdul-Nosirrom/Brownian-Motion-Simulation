@@ -45,8 +45,23 @@ void Window::update_positions()
     long unsigned int i;
 
     for (i=0; i < m_Spheres.size(); i++) {
-        brownian_sim(m_Spheres[i].m_position, dt);
+        brownian_sim(m_Spheres[i].m_position, dt, is3D);
     }
+
+
+    m_path.push_back(m_Spheres[0].m_position);
+}
+
+void Window::draw_path()
+{
+    long unsigned int i;
+
+    glBegin(GL_LINE_STRIP);
+    glColor3f(0.0,1.0,0.0);
+    for (i=0; i < m_path.size(); i++){
+        glVertex3f(m_path[i].x, m_path[i].y, m_path[i].z);
+    }
+    glEnd();
 }
 
 void Window::set_deltaT(double new_dt)
@@ -119,6 +134,7 @@ void Window::display()
     // Update sphere position
     this->update_positions();
     // Draw path
+    this->draw_path();
 
 
     glFlush();                    // Flush buffer handeled by GL

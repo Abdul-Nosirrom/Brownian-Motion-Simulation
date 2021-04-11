@@ -1,6 +1,6 @@
 #include "browniansim.h"
 
-void brownian_sim(vec3& position, double dt)
+void brownian_sim(vec3& position, double dt, bool is3D)
 {
     // Check for collision, if none do the below
 
@@ -16,7 +16,9 @@ void brownian_sim(vec3& position, double dt)
     dy = sqrt(dt) * rand_norm;
     position.y += dy;
 
-    gaussian_(&rand_norm);
-    dz = sqrt(dt) * rand_norm;
-    position.z += dx;
+    if (is3D) {
+        gaussian_(&rand_norm);
+        dz = sqrt(dt) * rand_norm;
+        position.z += dx;
+    }
 }
