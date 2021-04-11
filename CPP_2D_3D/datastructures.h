@@ -6,6 +6,8 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 
+//extern "C" void gaussian(double *);
+
 typedef struct  vector3
 {
     GLfloat x;

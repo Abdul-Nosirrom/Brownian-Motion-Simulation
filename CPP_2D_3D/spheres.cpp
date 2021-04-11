@@ -1,3 +1,4 @@
+extern "C" void gaussian_(float *);
 #include "spheres.h"
 #include <iostream>
 
@@ -20,12 +21,14 @@ void initialize_spheres(std::vector<Sphere>& spheresGL, int numSpheres, bool is3
     //delete sphereStack;
 
     //std::cout << spheresGL.capacity() <<std::endl;
-
+    float val;
     for (i=0; i<numSpheres; i++) {
+        gaussian_(&val);
         posRandomizer = {rand()%(2*LENGTH)-LENGTH, rand()%(2*HEIGHT)-HEIGHT, rand()%(2*DEPTH)-DEPTH};
         sphereStack = Sphere(0.75, particleColor, posRandomizer);
         spheresGL.push_back(sphereStack);
         //delete sphereStack;
+        std::cout << val << "\n";
     }
     
     //return spheresGL;    

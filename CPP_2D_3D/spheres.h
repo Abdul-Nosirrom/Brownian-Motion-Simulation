@@ -11,7 +11,6 @@
 
 #include "datastructures.h"
 
-
 #define LENGTH 50
 #define HEIGHT 50
 #define DEPTH 50
