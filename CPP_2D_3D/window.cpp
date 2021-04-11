@@ -48,12 +48,12 @@ void Window::update_positions()
     float vel = 2;
     long unsigned int i;
 
-    for (i=1; i < m_Spheres.size(); i++) {
+    for (i=0; i < m_Spheres.size(); i++) {
         brownian_sim(m_Spheres[i].m_position, dt, is3D);
     }
-    m_Spheres[0].m_position.x += vel*dt;
-    m_Spheres[0].m_position.y += vel*dt;
-    m_Spheres[0].m_position.z += vel*dt;
+    //m_Spheres[0].m_position.x += vel*dt;
+    //m_Spheres[0].m_position.y += vel*dt;
+    //m_Spheres[0].m_position.z += vel*dt;
 
     std::cout << " x: " << m_Spheres[0].m_position.x;
     std::cout << " y: " << m_Spheres[0].m_position.y;
@@ -186,7 +186,8 @@ void Window::display3D()
     glRotated(angle, 0, 0, 1);
     //glPopMatrix();
     glPushMatrix();
-    this->draw_axes();
+    this->draw_path();
+    glPopMatrix();      // PLACED DRAW PATH BEFORE SPHERE SO SPHERE OVERLAPS IT (EDIT)
     //glPopMatrix();
     this->draw_spheres3D();
         // Update sphere position
@@ -194,13 +195,12 @@ void Window::display3D()
     // Draw path
     //glPopMatrix();
     
-    //glPushMatrix();
-    this->draw_path();
-    glPopMatrix();
+    glPushMatrix();
+    this->draw_axes();
 
     glFlush();                    // Flush buffer handeled by GL
     glutSwapBuffers();            // Swap with buffer displayed (remember the double buffering)
-    //glPopMatrix();  
+    glPopMatrix();  
     //theta+=dtheta; 
 }
 
