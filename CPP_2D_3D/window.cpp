@@ -72,7 +72,7 @@ Window::Window(bool s_3D)
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);  // Display mode takes parameters (Using parameters defined as
                                                 // masks, hence the bitwise or | ) that specificy the mode
                                                 // Here, it's using RBG and DOUBLE (buffering) defined in GLUT
-        glutInitWindowSize(1000,500);
+        glutInitWindowSize(800,600);
         glutInitWindowPosition(50,50);
         glutCreateWindow("Brownian Motion");                    // 
         glClearColor(0.0, 0.0, 0.0, 1.0);

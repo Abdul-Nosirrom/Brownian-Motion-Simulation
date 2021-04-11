@@ -9,9 +9,6 @@
 #include "spheres.h"
 //#include "datastructures.h"
 
-#define LENGTH 50.0
-#define HEIGHT 50.0
-
 void timer();
 
 class Window 

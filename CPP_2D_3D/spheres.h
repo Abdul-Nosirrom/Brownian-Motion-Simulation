@@ -11,7 +11,10 @@
 
 #include "datastructures.h"
 
-#define BORDERS 10
+
+#define LENGTH 50
+#define HEIGHT 50
+#define DEPTH 50
 
 typedef struct color {
     GLfloat r;
