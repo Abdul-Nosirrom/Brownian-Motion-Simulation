@@ -45,15 +45,20 @@ void Window::draw_spheres3D()
 
 void Window::update_positions()
 {
+    static double time = 0;
     float vel = 2;
     long unsigned int i;
 
-    for (i=0; i < m_Spheres.size(); i++) {
-        brownian_sim(m_Spheres[i].m_position, dt, is3D);
+    for (i=1; i < m_Spheres.size(); i++) {
+        //brownian_sim(m_Spheres[i].m_position, dt, is3D);
+        m_Spheres[i].m_position.x -= vel/2 *dt;
+        m_Spheres[i].m_position.y -= vel/2 *dt;
+        m_Spheres[i].m_position.z -= vel/2 *dt;
     }
-    //m_Spheres[0].m_position.x += vel*dt;
-    //m_Spheres[0].m_position.y += vel*dt;
-    //m_Spheres[0].m_position.z += vel*dt;
+    m_Spheres[0].m_position.x = 25*(cos(time));
+    m_Spheres[0].m_position.y = 25*(sin(time));
+    m_Spheres[0].m_position.z = 0;
+    time += dt;
 
     std::cout << " x: " << m_Spheres[0].m_position.x;
     std::cout << " y: " << m_Spheres[0].m_position.y;
@@ -195,7 +200,7 @@ void Window::display3D()
     // Draw path
     //glPopMatrix();
     
-    glPushMatrix();
+    //glPushMatrix();
     this->draw_axes();
 
     glFlush();                    // Flush buffer handeled by GL
