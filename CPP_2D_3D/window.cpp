@@ -160,6 +160,7 @@ void Window::display()
 
 void Window::draw_axes()
 {
+    /*
   glBegin(GL_LINE_STRIP);
     glColor3f(0,0,0);
     glVertex3f(-100,0,0);
@@ -177,6 +178,48 @@ void Window::draw_axes()
     glVertex3f(0,0,-100);
     glVertex3f(0,0,100);
   glEnd();
+*/
+    glBegin(GL_LINE_STRIP);
+        glColor3f(0,0,0);
+        glVertex3f(-LENGTH,-HEIGHT,DEPTH);
+        glVertex3f(LENGTH,-HEIGHT,DEPTH);
+        glVertex3f(LENGTH,-HEIGHT,-DEPTH);
+        glVertex3f(-LENGTH,-HEIGHT,-DEPTH);
+        glVertex3f(-LENGTH,-HEIGHT,DEPTH);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+        glColor3f(0,0,0);
+        glVertex3f(-LENGTH,HEIGHT,DEPTH);
+        glVertex3f(LENGTH,HEIGHT,DEPTH);
+        glVertex3f(LENGTH,HEIGHT,-DEPTH);
+        glVertex3f(-LENGTH,HEIGHT,-DEPTH);
+        glVertex3f(-LENGTH,HEIGHT,DEPTH);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+        glColor3f(0,0,0);
+        glVertex3f(-LENGTH,HEIGHT,DEPTH);
+        glVertex3f(-LENGTH,-HEIGHT,DEPTH);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+        glColor3f(0,0,0);
+        glVertex3f(-LENGTH,HEIGHT,-DEPTH);
+        glVertex3f(-LENGTH,-HEIGHT,-DEPTH);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+        glColor3f(0,0,0);
+        glVertex3f(LENGTH,HEIGHT,DEPTH);
+        glVertex3f(LENGTH,-HEIGHT,DEPTH);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+        glColor3f(0,0,0);
+        glVertex3f(LENGTH,HEIGHT,-DEPTH);
+        glVertex3f(LENGTH,-HEIGHT,-DEPTH);
+    glEnd();
 }
 
 /* Does the job */
