@@ -39,9 +39,14 @@ void initialize_spheres(std::vector<Sphere>& spheresGL, int numSpheres, bool is3
     //return spheresGL;    
 }
 
-void border_collision(Sphere check)
+void Sphere::border_collision()
 {
-
+    if (fabs(m_position.x) >= LENGTH)
+        m_velocity.x *= -1;
+    if (fabs(m_position.y) >= HEIGHT)
+        m_velocity.y *= -1;
+    if (fabs(m_position.z) >= DEPTH)
+        m_velocity.z *= -1;
 }
 
 ////////////////////////////////

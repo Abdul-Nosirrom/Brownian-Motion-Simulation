@@ -39,6 +39,7 @@ class Sphere
         Sphere(GLfloat newRadius, color newColor);
         Sphere(GLfloat newRadius, color newColor, vec3 initPos, vec3 initVel);
         void draw_sphere();
+        void border_collision();
         ~Sphere();
 
 };
