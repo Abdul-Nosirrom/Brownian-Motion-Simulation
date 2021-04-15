@@ -5,6 +5,7 @@ void initialize_spheres(std::vector<Sphere>& spheresGL, int numSpheres, bool is3
 {
     Sphere sphereStack;
     vec3 posRandomizer;
+    vec3 velRandomizer;
     color particleColor;
 
     if (!is3D) particleColor = {1.0,1.0,1.0};
@@ -24,14 +25,23 @@ void initialize_spheres(std::vector<Sphere>& spheresGL, int numSpheres, bool is3
     float val;
     for (i=0; i<numSpheres; i++) {
         gaussian_(&val);
+        velRandomizer = {rand()%(VEL)-VEL, rand()%(VEL)-VEL, rand()%(VEL)-VEL};
         posRandomizer = {rand()%(2*LENGTH)-LENGTH, rand()%(2*HEIGHT)-HEIGHT, rand()%(2*DEPTH)-DEPTH};
-        sphereStack = Sphere(0.75, particleColor, posRandomizer);
+        if (!is3D) {
+            velRandomizer.z = 0;
+            posRandomizer.z = 0;
+        }
+        sphereStack = Sphere(0.75, particleColor, posRandomizer, velRandomizer);
         spheresGL.push_back(sphereStack);
         //delete sphereStack;
-        std::cout << val << "\n";
     }
     
     //return spheresGL;    
+}
+
+void border_collision(Sphere check)
+{
+
 }
 
 ////////////////////////////////
@@ -53,11 +63,11 @@ Sphere::Sphere(GLfloat newRadius, color newColor)
     m_color = newColor; 
 }
 
-Sphere::Sphere(GLfloat newRadius, color newColor, vec3 initPos)
+Sphere::Sphere(GLfloat newRadius, color newColor, vec3 initPos, vec3 initVel)
 {
     m_radius = newRadius;
     m_position = initPos;
-    m_velocity = {0, 0, 0};
+    m_velocity = initVel;
     m_color = newColor; 
 }
 /////////////////////////////////

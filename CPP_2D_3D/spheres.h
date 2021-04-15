@@ -16,6 +16,9 @@
 #define HEIGHT 50
 #define DEPTH 50
 
+#define VEL 15
+
+
 typedef struct color {
     GLfloat r;
     GLfloat g;
@@ -34,7 +37,7 @@ class Sphere
 
         Sphere();
         Sphere(GLfloat newRadius, color newColor);
-        Sphere(GLfloat newRadius, color newColor, vec3 initPos);
+        Sphere(GLfloat newRadius, color newColor, vec3 initPos, vec3 initVel);
         void draw_sphere();
         ~Sphere();
 
@@ -42,3 +45,4 @@ class Sphere
 
 //std::vector<Sphere> initialize_spheres(int numSpheres);
 void initialize_spheres(std::vector<Sphere>&, int numSpheres, bool is3D);
+void border_collision(Sphere);

@@ -51,9 +51,9 @@ void Window::update_positions()
 
     for (i=1; i < m_Spheres.size(); i++) {
         //brownian_sim(m_Spheres[i].m_position, dt, is3D);
-        m_Spheres[i].m_position.x -= vel/2 *dt;
-        m_Spheres[i].m_position.y -= vel/2 *dt;
-        m_Spheres[i].m_position.z -= vel/2 *dt;
+        m_Spheres[i].m_position.x += m_Spheres[i].m_velocity.x*dt;
+        m_Spheres[i].m_position.y += m_Spheres[i].m_velocity.y*dt;
+        m_Spheres[i].m_position.z += m_Spheres[i].m_velocity.z*dt;
     }
     m_Spheres[0].m_position.x = 25*(cos(time));
     m_Spheres[0].m_position.y = 25*(sin(time));
