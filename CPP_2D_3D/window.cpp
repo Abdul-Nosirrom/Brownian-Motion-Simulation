@@ -51,6 +51,7 @@ void Window::update_positions()
 
     for (i=1; i < m_Spheres.size(); i++) {
         m_Spheres[i].border_collision();
+        intersphere_collision(m_Spheres);
         //brownian_sim(m_Spheres[i].m_position, dt, is3D);
         m_Spheres[i].m_position.x += m_Spheres[i].m_velocity.x*dt;
         m_Spheres[i].m_position.y += m_Spheres[i].m_velocity.y*dt;
