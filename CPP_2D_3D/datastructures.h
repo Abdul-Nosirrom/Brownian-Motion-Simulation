@@ -5,30 +5,20 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
+#include <math.h>
 
-typedef struct  vector3
+struct  vec3
 {
     GLfloat x;
     GLfloat y;
     GLfloat z;
-} vec3;
 
-class LinkedList {
-
-    typedef struct Node {
-        vec3 pos;
-        struct Node* next;
-    } Node;
-
-    Node* head;
-    Node* tail;
-
-    public:
-        LinkedList();
-
-        void draw_path();
-        void add_position(vec3);
-        
-        ~LinkedList();
+    vec3 operator-(vec3 &obj);
+    vec3 operator+(vec3 &obj);
+    vec3 operator*(GLfloat &obj);
+    vec3 normalized();
+    float dot(vec3 obj);
+    float length();
 
 };
+

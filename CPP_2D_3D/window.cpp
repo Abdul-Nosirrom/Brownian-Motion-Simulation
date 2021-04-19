@@ -57,9 +57,8 @@ void Window::update_positions()
         m_Spheres[i].m_position.y += m_Spheres[i].m_velocity.y*dt;
         m_Spheres[i].m_position.z += m_Spheres[i].m_velocity.z*dt;
     }
-    //m_Spheres[0].m_position.x = 25*(cos(time));
-    //m_Spheres[0].m_position.y = 25*(sin(time));
-    //m_Spheres[0].m_position.z = 0;
+    if (m_Spheres.size() == 1)
+        brownian_sim(m_Spheres[0].m_position, dt, is3D);
     time += dt;
 
     std::cout << " x: " << m_Spheres[0].m_position.x;

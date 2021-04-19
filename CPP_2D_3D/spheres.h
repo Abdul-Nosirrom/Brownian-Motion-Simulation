@@ -9,6 +9,7 @@
 #include <vector>
 #include <memory>
 
+
 //#include "datastructures.h"
 #include "browniansim.h"
 
@@ -41,6 +42,13 @@ class Sphere
         void draw_sphere();
         void border_collision();
         ~Sphere();
+        friend bool operator== (Sphere& s1, Sphere& s2);
+        float minx();
+        float maxx();
+        float miny();
+        float maxy();
+        float minz();
+        float maxz();
 
 };
 
@@ -51,3 +59,4 @@ void intersphere_collision(std::vector<Sphere>&);
 bool check_pairs(std::vector<std::vector<int>> pairs, int j1, int j2);
 bool is_collision(double r1, double r2, vec3 pos1, vec3 pos2);
 void update_collision_velocity(Sphere& C1, Sphere& C2);
+

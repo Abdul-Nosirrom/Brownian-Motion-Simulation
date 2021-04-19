@@ -1,48 +1,26 @@
 #include "datastructures.h"
 
-LinkedList::LinkedList()
-{
-    LinkedList motionData;
-    head = new Node;
-    tail = new Node;
-
-    head->next = tail;
-    tail->next = NULL;
-
-    head->pos.x = 0;
-    head->pos.y = 0;
-    head->pos.z = 0;
-
-    tail->pos.x = 0;
-    tail->pos.y = 0;
-    tail->pos.z = 0;
-    
+vec3 vec3::operator-(vec3 &obj){
+    return vec3{this->x - obj.x,this->y - obj.y,this->z - obj.z};
 }
 
-void LinkedList::add_position(vec3 newPos)
-{
-    Node* newVec = new Node;
-
-    newVec->pos.x = newPos.x;
-    newVec->pos.y = newPos.y;
-    newVec->pos.z = newPos.z;
-
-    Node* trav = head;
-
-    while(trav->next != NULL) {
-        trav = trav->next;
-    }
-
-    // Draw the new position here (faster probably?)
-
-    trav->next = newVec;
+vec3 vec3::operator+(vec3 &obj){
+    return vec3{this->x + obj.x,this->y + obj.y,this->z + obj.z};
 }
 
-LinkedList::~LinkedList()
-{
-    Node* trav = head;
-    while(trav != NULL) {
-        delete trav;
-        trav = trav->next;
-    }
+vec3 vec3::operator*(GLfloat &obj){
+    return vec3{obj*this->x, obj*this->y, obj*this->z};
+}
+
+float vec3::dot(vec3 obj){
+    return obj.x*this->x + obj.y*this->y + obj.z*this->z;
+}
+
+float vec3::length() {
+    return sqrt(pow(this->x,2) + pow(this->y,2) + pow(this->z,2));
+}
+
+vec3 vec3::normalized(){
+    float l = this->length();
+    return vec3{this->x/l, this->y/l, this->z/l};
 }
