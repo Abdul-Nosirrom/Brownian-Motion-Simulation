@@ -18,11 +18,15 @@ void Window::generate_spheres(int numSpheres)
 void Window::draw_spheres2D()
 {
     long unsigned int i = 0;
-    
+    float color[4];
     for (i = 0; i < m_Spheres.size(); i++) {
-        glColor3f(m_Spheres[i].m_color.r, m_Spheres[i].m_color.g, m_Spheres[i].m_color.b);
+        color[0] = m_Spheres[i].m_color.r; color[1] = m_Spheres[i].m_color.g; color[2] = m_Spheres[i].m_color.b;
+        color[3] = 0;
+        //glColor3f(m_Spheres[i].m_color.r, m_Spheres[i].m_color.g, m_Spheres[i].m_color.b);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
         glTranslatef(m_Spheres[i].m_position.x, m_Spheres[i].m_position.y, 0);
-        gluDisk(gluNewQuadric(), 0.0, m_Spheres[i].m_radius, 20, 10);
+        //gluDisk(gluNewQuadric(), 0.0, m_Spheres[i].m_radius, 20, 10);
+        gluSphere(gluNewQuadric(), m_Spheres[i].m_radius, 20, 10);
         glTranslatef(-m_Spheres[i].m_position.x, -m_Spheres[i].m_position.y, 0);
     }
 }
@@ -31,10 +35,13 @@ void Window::draw_spheres3D()
 {
     long unsigned int i = 0;
     GLUquadric *quad;
-    
+    float color[4]; 
     for (i = 0; i < m_Spheres.size(); i++) {
         glPushMatrix();
-        glColor3f(m_Spheres[i].m_color.r, m_Spheres[i].m_color.g, m_Spheres[i].m_color.b);
+        color[0] = m_Spheres[i].m_color.r; color[1] = m_Spheres[i].m_color.g; color[2] = m_Spheres[i].m_color.b;
+        color[3] = 1;
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
+        //glColor3f(m_Spheres[i].m_color.r, m_Spheres[i].m_color.g, m_Spheres[i].m_color.b);
         glTranslatef(m_Spheres[i].m_position.x, m_Spheres[i].m_position.y, m_Spheres[i].m_position.z);
         //gluSphere(gluNewQuadric(), m_Spheres[i].m_radius, 20, 10);
         glutSolidSphere(m_Spheres[i].m_radius, 200, 10);
@@ -105,7 +112,8 @@ Window::Window(bool s_3D)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         gluLookAt(100,100,100,0,0,0,0,0,1);
-    
+        //glEnable(GL_LIGHTING);
+        //glEnable(GL_NORMALIZE);
         glutTimerFunc(0,timer,0);
         glEnable(GL_LINE_SMOOTH);                     // Basically anti-aliasing?
         glLineWidth(3.0); 
@@ -126,11 +134,29 @@ Window::Window(bool s_3D)
                                                 // specified parameters
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();  
-        glDisable(GL_LIGHTING);                       // Disable because 2D
+        //glEnable(GL_LIGHTING);                       // Disable because 2D
+        //glDisable(GL_LIGHTING);
+        //glEnable(GL_NORMALIZE);
         glEnable(GL_LINE_SMOOTH);                     // Basically anti-aliasing?
         glLineWidth(0.1);     
 
     }
+
+    /* Color and Shader Data temporary */
+    GLfloat mat_specular[] = {0.02,0.02,0.02,0.5}; 
+    GLfloat mat_shininess[] = {5.0}; 
+    GLfloat light_position[] = {0.0,10.0,0.0,0.0};
+
+    //glClearColor (0.0, 0.0, 0.0, 1.0);
+    /*
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); 
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess); 
+
+    glEnable(GL_LIGHTING);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glEnable(GL_LIGHT0);  
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);  */
 }
 
 void Window::reshape(int w, int h)
@@ -255,5 +281,8 @@ void Window::display3D()
 
 Window::~Window()
 {
-    exit(1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glFlush(); 
+    glutSwapBuffers();
+    exit(0);
 }

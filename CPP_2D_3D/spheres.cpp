@@ -185,11 +185,11 @@ void initialize_spheres(std::vector<Sphere>& spheresGL, int numSpheres, bool is3
 
 void Sphere::border_collision()
 {
-    if (fabs(m_position.x) >= LENGTH)
+    if (fabs(m_position.x) + m_radius >= LENGTH)
         m_velocity.x *= -1;
-    if (fabs(m_position.y) >= HEIGHT)
+    if (fabs(m_position.y) + m_radius >= HEIGHT)
         m_velocity.y *= -1;
-    if (fabs(m_position.z) >= DEPTH)
+    if (fabs(m_position.z) + m_radius >= DEPTH)
         m_velocity.z *= -1;
 }
 
@@ -229,3 +229,145 @@ float Sphere::miny(){return this->m_position.y - this->m_radius;}
 float Sphere::maxy(){return this->m_position.y + this->m_radius;}
 float Sphere::minz(){return this->m_position.z - this->m_radius;}
 float Sphere::maxz(){return this->m_position.z + this->m_radius;}
+
+/* Grid Define */
+void Sphere::grid_define(Sphere& s)
+{
+    // Defining grid/box size
+    float x_int = (float)LENGTH/3;
+    float y_int = (float)HEIGHT/3;
+    float z_int = (float)DEPTH/3;
+
+    // Placing sphere in a box - can be in two places at once so not if else
+    // Goal is to minimize time searching for pairs of collision so this 
+    // partition function should be constant time
+
+    // Box 1,2,3
+    if (-LENGTH <= m_position.x <= -LENGTH + x_int) {
+        // y-box 1
+        if (-HEIGHT <= m_position.y <= -HEIGHT + y_int) {
+            // z-box 1
+            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
+                partitions[0][0][0].push_back(s);
+            }
+            //z-box 2
+            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
+                partitions[0][0][1].push_back(s);
+            }
+            // z-box 3
+            if (DEPTH - z_int <= m_position.z <= DEPTH) {
+                partitions[0][0][2].push_back(s);
+            }
+        }
+        // y-box 2
+        if (-HEIGHT + y_int <= m_position.y <= HEIGHT - y_int) {
+            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
+                partitions[0][1][0].push_back(s);
+            }
+            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
+                partitions[0][1][1].push_back(s);
+            }
+            if (DEPTH - z_int <= m_position.z <= DEPTH) {
+                partitions[0][1][2].push_back(s);
+            }
+        }
+        // y-box 3
+        if (HEIGHT - y_int <= m_position.y <= HEIGHT) {
+            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
+                partitions[0][2][0].push_back(s);
+            }
+            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
+                partitions[0][2][1].push_back(s);
+            }
+            if (DEPTH - z_int <= m_position.z <= DEPTH) {
+                partitions[0][2][2].push_back(s);
+            }
+        }
+
+    // x-box 2
+    if (-LENGTH <= m_position.x <= -LENGTH + x_int) {
+        // y-box 1
+        if (-HEIGHT <= m_position.y <= -HEIGHT + y_int) {
+            // z-box 1
+            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
+                partitions[1][0][0].push_back(s);
+            }
+            //z-box 2
+            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
+                partitions[1][0][1].push_back(s);
+            }
+            // z-box 3
+            if (DEPTH - z_int <= m_position.z <= DEPTH) {
+                partitions[1][0][2].push_back(s);
+            }
+        }
+        // y-box 2
+        if (-HEIGHT + y_int <= m_position.y <= HEIGHT - y_int) {
+            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
+                partitions[1][1][0].push_back(s);
+            }
+            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
+                partitions[1][1][1].push_back(s);
+            }
+            if (DEPTH - z_int <= m_position.z <= DEPTH) {
+                partitions[1][1][2].push_back(s);
+            }
+        }
+        // y-box 3
+        if (HEIGHT - y_int <= m_position.y <= HEIGHT) {
+            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
+                partitions[1][2][0].push_back(s);
+            }
+            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
+                partitions[1][2][1].push_back(s);
+            }
+            if (DEPTH - z_int <= m_position.z <= DEPTH) {
+                partitions[1][2][2].push_back(s);
+            }
+        }
+    }
+
+    // x-box 3
+    if (-LENGTH <= m_position.x <= -LENGTH + x_int) {
+        // y-box 1
+        if (-HEIGHT <= m_position.y <= -HEIGHT + y_int) {
+            // z-box 1
+            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
+                partitions[2][0][0].push_back(s);
+            }
+            //z-box 2
+            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
+                partitions[2][0][1].push_back(s);
+            }
+            // z-box 3
+            if (DEPTH - z_int <= m_position.z <= DEPTH) {
+                partitions[2][0][2].push_back(s);
+            }
+        }
+        // y-box 2
+        if (-HEIGHT + y_int <= m_position.y <= HEIGHT - y_int) {
+            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
+                partitions[2][1][0].push_back(s);
+            }
+            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
+                partitions[2][1][1].push_back(s);
+            }
+            if (DEPTH - z_int <= m_position.z <= DEPTH) {
+                partitions[2][1][2].push_back(s);
+            }
+        }
+        // y-box 3
+        if (HEIGHT - y_int <= m_position.y <= HEIGHT) {
+            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
+                partitions[2][2][0].push_back(s);
+            }
+            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
+                partitions[2][2][1].push_back(s);
+            }
+            if (DEPTH - z_int <= m_position.z <= DEPTH) {
+                partitions[2][2][2].push_back(s);
+            }
+        }
+    }
+
+}

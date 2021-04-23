@@ -19,7 +19,6 @@
 
 #define VEL 15
 
-
 typedef struct color {
     GLfloat r;
     GLfloat g;
@@ -43,6 +42,7 @@ class Sphere
         void border_collision();
         ~Sphere();
         friend bool operator== (Sphere& s1, Sphere& s2);
+        void grid_define(Sphere&);
         float minx();
         float maxx();
         float miny();
@@ -60,3 +60,9 @@ bool check_pairs(std::vector<std::vector<int>> pairs, int j1, int j2);
 bool is_collision(double r1, double r2, vec3 pos1, vec3 pos2);
 void update_collision_velocity(Sphere& C1, Sphere& C2);
 
+// Objects
+// Define a 3x3 grid 
+    /*  1  2  3
+     *  4  5  6
+     *  7  8  9 */
+static std::vector<Sphere> partitions[3][3][3];

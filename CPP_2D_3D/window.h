@@ -4,6 +4,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <vector>
+#include <list>
 #include <memory>
 
 #include "spheres.h"
