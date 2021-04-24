@@ -12,6 +12,8 @@
 
 void timer();
 
+static bool showParticles = false;
+
 class Window 
 {
     bool is3D;
@@ -37,6 +39,8 @@ class Window
         void display3D();
 
         void set_deltaT(double new_dt);
+
+        void buttons(int selection);
 
         ~Window();
 

@@ -21,7 +21,10 @@ void reshape(int w, int h)
     brownian->reshape(w,h);
 }
 
-
+void choice(int selection)
+{
+    brownian->buttons(selection);
+}
 int main(int argc, char *argv[]) 
 {
     int is3D;
@@ -50,7 +53,12 @@ int main(int argc, char *argv[])
     else {
         glutDisplayFunc(display);
         glutIdleFunc(display);
-    }                    
+    }  
+    glutCreateMenu(choice);
+    glutAddMenuEntry("Hide Particles", 1);
+    glutAddMenuEntry("Show Particles", 2);
+    glutAttachMenu(GLUT_LEFT_BUTTON);
+                      
     glutMainLoop();  
     // Add deconstructors here 
     return 0;

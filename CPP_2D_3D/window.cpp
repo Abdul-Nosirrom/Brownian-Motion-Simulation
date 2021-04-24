@@ -19,11 +19,12 @@ void Window::draw_spheres2D()
 {
     long unsigned int i = 0;
     float color[4];
-    for (i = 0; i < m_Spheres.size(); i++) {
+    int drawSize = showParticles ? m_Spheres.size() : 1;
+    for (i = 0; i < drawSize; i++) {
         color[0] = m_Spheres[i].m_color.r; color[1] = m_Spheres[i].m_color.g; color[2] = m_Spheres[i].m_color.b;
         color[3] = 0;
-        //glColor3f(m_Spheres[i].m_color.r, m_Spheres[i].m_color.g, m_Spheres[i].m_color.b);
-        glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
+        glColor3f(m_Spheres[i].m_color.r, m_Spheres[i].m_color.g, m_Spheres[i].m_color.b);
+        //glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
         glTranslatef(m_Spheres[i].m_position.x, m_Spheres[i].m_position.y, 0);
         //gluDisk(gluNewQuadric(), 0.0, m_Spheres[i].m_radius, 20, 10);
         gluSphere(gluNewQuadric(), m_Spheres[i].m_radius, 20, 10);
@@ -36,7 +37,8 @@ void Window::draw_spheres3D()
     long unsigned int i = 0;
     GLUquadric *quad;
     float color[4]; 
-    for (i = 0; i < m_Spheres.size(); i++) {
+    int drawSize = showParticles ? m_Spheres.size() : 1;
+    for (i = 0; i < drawSize; i++) {
         glPushMatrix();
         color[0] = m_Spheres[i].m_color.r; color[1] = m_Spheres[i].m_color.g; color[2] = m_Spheres[i].m_color.b;
         color[3] = 1;
@@ -68,10 +70,11 @@ void Window::update_positions()
         brownian_sim(m_Spheres[0].m_position, dt, is3D);
     time += dt;
 
-    std::cout << " x: " << m_Spheres[0].m_position.x;
-    std::cout << " y: " << m_Spheres[0].m_position.y;
-    std::cout << " z: " << m_Spheres[0].m_position.z << std::endl;
+    //std::cout << " x: " << m_Spheres[0].m_position.x;
+    //std::cout << " y: " << m_Spheres[0].m_position.y;
+    //std::cout << " z: " << m_Spheres[0].m_position.z << std::endl;
     m_path.push_back(m_Spheres[0].m_position);
+    //grid_define(m_Spheres, is3D);
 }
 
 void Window::draw_path()
@@ -89,6 +92,18 @@ void Window::draw_path()
 void Window::set_deltaT(double new_dt)
 {
     this->dt = new_dt;
+}
+
+void Window::buttons(int selection)
+{
+    switch(selection) {
+        case 1:
+            showParticles = false;
+            break;
+        case 2:
+            showParticles = true;
+            break;
+    }
 }
 
 Window::Window(bool s_3D)
@@ -111,7 +126,7 @@ Window::Window(bool s_3D)
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        gluLookAt(100,100,100,0,0,0,0,0,1);
+        gluLookAt(40,40,40,0,0,0,0,0,1); // Change screen size
         //glEnable(GL_LIGHTING);
         //glEnable(GL_NORMALIZE);
         glutTimerFunc(0,timer,0);
@@ -148,7 +163,7 @@ Window::Window(bool s_3D)
     GLfloat light_position[] = {0.0,10.0,0.0,0.0};
 
     //glClearColor (0.0, 0.0, 0.0, 1.0);
-    /*
+    
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); 
     glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess); 
 
@@ -156,7 +171,7 @@ Window::Window(bool s_3D)
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     glEnable(GL_LIGHT0);  
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);  */
+    glDepthFunc(GL_LESS);  
 }
 
 void Window::reshape(int w, int h)
@@ -166,7 +181,7 @@ void Window::reshape(int w, int h)
 
 void Window::display()
 {
-    glClear(GL_COLOR_BUFFER_BIT); //
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //
     glPushMatrix();  
     //glRotatef(theta,0,0,1); 
 
@@ -176,9 +191,10 @@ void Window::display()
     this->update_positions();
     // Draw path
     this->draw_path();
+    glDisable(GL_LIGHTING);
 
 
-    glFlush();                    // Flush buffer handeled by GL
+    //glFlush();                    // Flush buffer handeled by GL
     glutSwapBuffers();            // Swap with buffer displayed (remember the double buffering)
     glPopMatrix();  
     //theta+=dtheta; 
@@ -253,7 +269,7 @@ void Window::display3D()
 {
 
 
-    glClear(GL_COLOR_BUFFER_BIT); //
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //
     glPushMatrix();  
     //glRotatef(theta,0,0,1); 
 
@@ -273,7 +289,7 @@ void Window::display3D()
     //glPushMatrix();
     this->draw_axes();
 
-    glFlush();                    // Flush buffer handeled by GL
+    //glFlush();                    // Flush buffer handeled by GL
     glutSwapBuffers();            // Swap with buffer displayed (remember the double buffering)
     glPopMatrix();  
     //theta+=dtheta; 
