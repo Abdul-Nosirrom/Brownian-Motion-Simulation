@@ -7,15 +7,13 @@
 #include <GL/glut.h>
 #include <math.h>
 #include <vector>
+#include <unordered_set>
 #include <memory>
-
-
-//#include "datastructures.h"
 #include "browniansim.h"
 
-#define LENGTH 50
-#define HEIGHT 50
-#define DEPTH 50
+#define LENGTH 20
+#define HEIGHT 20
+#define DEPTH 20
 
 #define VEL 15
 
@@ -41,8 +39,8 @@ class Sphere
         void draw_sphere();
         void border_collision();
         ~Sphere();
-        friend bool operator== (Sphere& s1, Sphere& s2);
-        void grid_define(Sphere&);
+        bool operator== (const Sphere& s);
+        //void grid_define(Sphere&);
         float minx();
         float maxx();
         float miny();
@@ -56,13 +54,11 @@ class Sphere
 void initialize_spheres(std::vector<Sphere>&, int numSpheres, bool is3D);
 void border_collision(Sphere);
 void intersphere_collision(std::vector<Sphere>&);
+void grid_define(std::vector<Sphere>&, bool);
 bool check_pairs(std::vector<std::vector<int>> pairs, int j1, int j2);
 bool is_collision(double r1, double r2, vec3 pos1, vec3 pos2);
 void update_collision_velocity(Sphere& C1, Sphere& C2);
+void reset_partitions();
+void intersphere_collisionV2();
 
-// Objects
-// Define a 3x3 grid 
-    /*  1  2  3
-     *  4  5  6
-     *  7  8  9 */
-static std::vector<Sphere> partitions[3][3][3];
+

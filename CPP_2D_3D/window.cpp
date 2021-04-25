@@ -1,4 +1,5 @@
 #include "window.h"
+//#include "base.h"
 
 double angle = 0.0;
 void timer( int value )
@@ -94,17 +95,6 @@ void Window::set_deltaT(double new_dt)
     this->dt = new_dt;
 }
 
-void Window::buttons(int selection)
-{
-    switch(selection) {
-        case 1:
-            showParticles = false;
-            break;
-        case 2:
-            showParticles = true;
-            break;
-    }
-}
 
 Window::Window(bool s_3D)
 {
@@ -150,28 +140,13 @@ Window::Window(bool s_3D)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();  
         //glEnable(GL_LIGHTING);                       // Disable because 2D
-        //glDisable(GL_LIGHTING);
+        glDisable(GL_LIGHTING);
         //glEnable(GL_NORMALIZE);
         glEnable(GL_LINE_SMOOTH);                     // Basically anti-aliasing?
         glLineWidth(0.1);     
 
     }
 
-    /* Color and Shader Data temporary */
-    GLfloat mat_specular[] = {0.02,0.02,0.02,0.5}; 
-    GLfloat mat_shininess[] = {5.0}; 
-    GLfloat light_position[] = {0.0,10.0,0.0,0.0};
-
-    //glClearColor (0.0, 0.0, 0.0, 1.0);
-    
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); 
-    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess); 
-
-    glEnable(GL_LIGHTING);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-    glEnable(GL_LIGHT0);  
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);  
 }
 
 void Window::reshape(int w, int h)
@@ -191,7 +166,6 @@ void Window::display()
     this->update_positions();
     // Draw path
     this->draw_path();
-    glDisable(GL_LIGHTING);
 
 
     //glFlush();                    // Flush buffer handeled by GL

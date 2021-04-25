@@ -1,9 +1,19 @@
 #include "spheres.h"
 #include <iostream>
+#include <algorithm>
+
+// Objects
+// Define a 3x3 grid 
+    /*  1  2  3
+     *  4  5  6
+     *  7  8  9 */
+std::vector<Sphere> partitions[3][3][3];
+
+
 // Operator overload
-bool operator==(Sphere& s1, Sphere& s2) {
-    return (s1.m_radius == s2.m_radius && s1.m_position.x == s2.m_position.x 
-            && s1.m_position.y == s2.m_position.y && s1.m_position.z == s2.m_position.z);}
+bool Sphere::operator==(const Sphere& s2) {
+    return (m_radius == s2.m_radius && m_position.x == s2.m_position.x 
+            && m_position.y == s2.m_position.y && m_position.z == s2.m_position.z);}
 /* Sweep and Prune Methods */
 void removeEntitites(std::vector<Sphere>& spheresGL, std::vector<Sphere>& toRemove)
 {
@@ -36,6 +46,32 @@ void removeEntitites(std::vector<Sphere>& spheresGL, std::vector<Sphere>& toRemo
 void sweep_prune(std::vector<Sphere>& spheresGL)
 {
 
+}
+
+
+void intersphere_collisionV2()
+{
+    int i,j,k,l,m;
+    bool hasCollided;
+
+    for (i=0; i < 3; i++) {
+        for (j=0; j < 3; j++) {
+            std::cout << partitions[i][j][0].size() << std::endl;
+            for (k=0; k < 3; k++) {
+                for (l=0; l < partitions[i][j][k].size(); l++) {
+                    for (m=l+1; m < partitions[i][j][k].size(); m++) {
+                        hasCollided = is_collision(
+                            partitions[i][j][k][l].m_radius, 
+                            partitions[i][j][k][m].m_radius,
+                            partitions[i][j][k][l].m_position, 
+                            partitions[i][j][k][m].m_position);
+                        if (hasCollided)
+                            update_collision_velocity(partitions[i][j][k][l], partitions[i][j][k][m]);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void intersphere_collision(std::vector<Sphere>& spheresGL)
@@ -123,8 +159,8 @@ void initialize_spheres(std::vector<Sphere>& spheresGL, int numSpheres, bool is3
     vec3 velRandomizer;
     color particleColor;
 
-    float mainRadius = 4;
-    float rad = 1;
+    float mainRadius = 3;
+    float rad = 0.8;
 
     float spacing = LENGTH/sqrt(numSpheres);
     if (is3D) spacing = LENGTH/(pow(numSpheres, 1/3));
@@ -180,6 +216,7 @@ void initialize_spheres(std::vector<Sphere>& spheresGL, int numSpheres, bool is3
             }
         }
     }
+    grid_define(spheresGL, is3D);
     //return spheresGL;    
 }
 
@@ -231,143 +268,63 @@ float Sphere::minz(){return this->m_position.z - this->m_radius;}
 float Sphere::maxz(){return this->m_position.z + this->m_radius;}
 
 /* Grid Define */
-void Sphere::grid_define(Sphere& s)
+void grid_define(std::vector<Sphere>& spheresGL, bool is3D)
 {
     // Defining grid/box size
-    float x_int = (float)LENGTH/3;
-    float y_int = (float)HEIGHT/3;
-    float z_int = (float)DEPTH/3;
+    float x_int = (float)2*LENGTH/3;
+    float y_int = (float)2*HEIGHT/3;
+    float z_int = (float)2*DEPTH/3;
 
-    // Placing sphere in a box - can be in two places at once so not if else
-    // Goal is to minimize time searching for pairs of collision so this 
-    // partition function should be constant time
+    int i,j,k, s;
+    float upper_x = -LENGTH + x_int, lower_x = -LENGTH, 
+          upper_y = -HEIGHT + y_int, lower_y = -HEIGHT, 
+          upper_z = -DEPTH + z_int, lower_z = -DEPTH;
 
-    // Box 1,2,3
-    if (-LENGTH <= m_position.x <= -LENGTH + x_int) {
-        // y-box 1
-        if (-HEIGHT <= m_position.y <= -HEIGHT + y_int) {
-            // z-box 1
-            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
-                partitions[0][0][0].push_back(s);
-            }
-            //z-box 2
-            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
-                partitions[0][0][1].push_back(s);
-            }
-            // z-box 3
-            if (DEPTH - z_int <= m_position.z <= DEPTH) {
-                partitions[0][0][2].push_back(s);
-            }
-        }
-        // y-box 2
-        if (-HEIGHT + y_int <= m_position.y <= HEIGHT - y_int) {
-            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
-                partitions[0][1][0].push_back(s);
-            }
-            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
-                partitions[0][1][1].push_back(s);
-            }
-            if (DEPTH - z_int <= m_position.z <= DEPTH) {
-                partitions[0][1][2].push_back(s);
-            }
-        }
-        // y-box 3
-        if (HEIGHT - y_int <= m_position.y <= HEIGHT) {
-            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
-                partitions[0][2][0].push_back(s);
-            }
-            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
-                partitions[0][2][1].push_back(s);
-            }
-            if (DEPTH - z_int <= m_position.z <= DEPTH) {
-                partitions[0][2][2].push_back(s);
-            }
-        }
+    bool ins;
 
-    // x-box 2
-    if (-LENGTH <= m_position.x <= -LENGTH + x_int) {
-        // y-box 1
-        if (-HEIGHT <= m_position.y <= -HEIGHT + y_int) {
-            // z-box 1
-            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
-                partitions[1][0][0].push_back(s);
+    reset_partitions();
+    for (s = 0; s < spheresGL.size(); s++) {
+
+        lower_x = -LENGTH; upper_x = lower_x + x_int; 
+        lower_y = -HEIGHT; upper_y = lower_y + y_int;  
+        lower_z = -DEPTH;  upper_z = lower_z + z_int; 
+
+    for (i=0; i < 3; i++) {
+        ins = false;
+        if (lower_x <= spheresGL[s].m_position.x && spheresGL[s].m_position.x <= upper_x) ins = true;
+        for (j=0; j < 3; j++) {
+            if (lower_x <= spheresGL[s].m_position.x && spheresGL[s].m_position.x <= upper_x && ins) ins = true;
+            else ins = false;
+            if (is3D) {
+                for (k=0; k < 3; k++) {
+                    if (lower_z <= spheresGL[s].m_position.z && spheresGL[s].m_position.z <= upper_z && ins) {
+                        partitions[i][j][k].push_back(spheresGL[s]);
+                    }
+                    upper_z += z_int;
+                    lower_z += z_int;
+                }
+            } if (ins){
+                partitions[i][j][0].push_back(spheresGL[s]);
             }
-            //z-box 2
-            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
-                partitions[1][0][1].push_back(s);
-            }
-            // z-box 3
-            if (DEPTH - z_int <= m_position.z <= DEPTH) {
-                partitions[1][0][2].push_back(s);
-            }
+            lower_y += y_int;
+            upper_y = lower_y + y_int;
         }
-        // y-box 2
-        if (-HEIGHT + y_int <= m_position.y <= HEIGHT - y_int) {
-            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
-                partitions[1][1][0].push_back(s);
-            }
-            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
-                partitions[1][1][1].push_back(s);
-            }
-            if (DEPTH - z_int <= m_position.z <= DEPTH) {
-                partitions[1][1][2].push_back(s);
-            }
-        }
-        // y-box 3
-        if (HEIGHT - y_int <= m_position.y <= HEIGHT) {
-            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
-                partitions[1][2][0].push_back(s);
-            }
-            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
-                partitions[1][2][1].push_back(s);
-            }
-            if (DEPTH - z_int <= m_position.z <= DEPTH) {
-                partitions[1][2][2].push_back(s);
+        lower_x += x_int;
+        upper_x = lower_x + x_int;
+    }
+
+    }
+}
+
+void reset_partitions()
+{
+    int i,j,k;
+
+    for (i=0; i < 3; i++) {
+        for (j=0; j < 3; j++) {
+            for (k=0; k < 3; k++) {
+                partitions[i][j][k].clear();
             }
         }
     }
-
-    // x-box 3
-    if (-LENGTH <= m_position.x <= -LENGTH + x_int) {
-        // y-box 1
-        if (-HEIGHT <= m_position.y <= -HEIGHT + y_int) {
-            // z-box 1
-            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
-                partitions[2][0][0].push_back(s);
-            }
-            //z-box 2
-            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
-                partitions[2][0][1].push_back(s);
-            }
-            // z-box 3
-            if (DEPTH - z_int <= m_position.z <= DEPTH) {
-                partitions[2][0][2].push_back(s);
-            }
-        }
-        // y-box 2
-        if (-HEIGHT + y_int <= m_position.y <= HEIGHT - y_int) {
-            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
-                partitions[2][1][0].push_back(s);
-            }
-            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
-                partitions[2][1][1].push_back(s);
-            }
-            if (DEPTH - z_int <= m_position.z <= DEPTH) {
-                partitions[2][1][2].push_back(s);
-            }
-        }
-        // y-box 3
-        if (HEIGHT - y_int <= m_position.y <= HEIGHT) {
-            if (-DEPTH <= m_position.z <= -DEPTH + z_int) {
-                partitions[2][2][0].push_back(s);
-            }
-            if (-DEPTH + z_int <= m_position.z <= DEPTH - z_int) {
-                partitions[2][2][1].push_back(s);
-            }
-            if (DEPTH - z_int <= m_position.z <= DEPTH) {
-                partitions[2][2][2].push_back(s);
-            }
-        }
-    }
-
 }

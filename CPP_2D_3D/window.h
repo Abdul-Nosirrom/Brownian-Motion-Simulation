@@ -10,9 +10,10 @@
 #include "spheres.h"
 //#include "datastructures.h"
 
+
 void timer();
 
-static bool showParticles = false;
+
 
 class Window 
 {
@@ -24,6 +25,7 @@ class Window
     public:
         std::vector<Sphere> m_Spheres;
         std::vector<vec3> m_path;
+        bool showParticles = false;
 
     public:
         Window(bool);

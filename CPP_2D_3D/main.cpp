@@ -21,9 +21,19 @@ void reshape(int w, int h)
     brownian->reshape(w,h);
 }
 
-void choice(int selection)
+void buttons(int selection)
 {
-    brownian->buttons(selection);
+    switch(selection) {
+        case 1:
+            brownian->showParticles = false;
+            break;
+        case 2:
+            brownian->showParticles = true;
+            break;
+        case 3:
+            brownian->~Window();
+            break;
+    }
 }
 int main(int argc, char *argv[]) 
 {
@@ -54,9 +64,10 @@ int main(int argc, char *argv[])
         glutDisplayFunc(display);
         glutIdleFunc(display);
     }  
-    glutCreateMenu(choice);
+    glutCreateMenu(buttons);
     glutAddMenuEntry("Hide Particles", 1);
     glutAddMenuEntry("Show Particles", 2);
+    glutAddMenuEntry("Exit", 3);
     glutAttachMenu(GLUT_LEFT_BUTTON);
                       
     glutMainLoop();  

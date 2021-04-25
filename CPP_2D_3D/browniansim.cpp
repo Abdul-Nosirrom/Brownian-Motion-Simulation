@@ -1,3 +1,4 @@
+//#include "browniansim.h"
 #include "browniansim.h"
 
 void brownian_sim(vec3& position, double dt, bool is3D)
