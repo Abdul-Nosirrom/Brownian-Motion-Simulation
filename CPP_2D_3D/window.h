@@ -7,8 +7,7 @@
 #include <list>
 #include <memory>
 
-#include "spheres.h"
-//#include "datastructures.h"
+#include "collisionhandler.h"
 
 
 void timer();
@@ -19,11 +18,9 @@ class Window
 {
     bool is3D;
     double dt;
-    //std::vector<std::unique_ptr<Sphere>> ptr_Spheres;
-    //int spheresRendered;
 
     public:
-        std::vector<Sphere> m_Spheres;
+        std::vector<Sphere*> m_Spheres;
         std::vector<vec3> m_path;
         bool showParticles = false;
 
@@ -56,6 +53,8 @@ class Window
         void draw_path();
 
         void draw_axes();
+
+        FILE* outputData;
 
 
 

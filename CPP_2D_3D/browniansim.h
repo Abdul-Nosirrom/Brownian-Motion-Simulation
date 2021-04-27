@@ -1,5 +1,5 @@
 #include <math.h>
-#include "datastructures.h"
+#include "vec.h"
 
 extern "C" void gaussian_(float *);
 

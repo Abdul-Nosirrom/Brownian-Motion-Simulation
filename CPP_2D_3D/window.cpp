@@ -22,14 +22,12 @@ void Window::draw_spheres2D()
     float color[4];
     int drawSize = showParticles ? m_Spheres.size() : 1;
     for (i = 0; i < drawSize; i++) {
-        color[0] = m_Spheres[i].m_color.r; color[1] = m_Spheres[i].m_color.g; color[2] = m_Spheres[i].m_color.b;
-        color[3] = 0;
-        glColor3f(m_Spheres[i].m_color.r, m_Spheres[i].m_color.g, m_Spheres[i].m_color.b);
+        glColor3f(m_Spheres[i]->m_color.r, m_Spheres[i]->m_color.g, m_Spheres[i]->m_color.b);
         //glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
-        glTranslatef(m_Spheres[i].m_position.x, m_Spheres[i].m_position.y, 0);
+        glTranslatef(m_Spheres[i]->m_position.x, m_Spheres[i]->m_position.y, 0);
         //gluDisk(gluNewQuadric(), 0.0, m_Spheres[i].m_radius, 20, 10);
-        gluSphere(gluNewQuadric(), m_Spheres[i].m_radius, 20, 10);
-        glTranslatef(-m_Spheres[i].m_position.x, -m_Spheres[i].m_position.y, 0);
+        gluSphere(gluNewQuadric(), m_Spheres[i]->m_radius, 20, 10);
+        glTranslatef(-m_Spheres[i]->m_position.x, -m_Spheres[i]->m_position.y, 0);
     }
 }
 
@@ -41,13 +39,11 @@ void Window::draw_spheres3D()
     int drawSize = showParticles ? m_Spheres.size() : 1;
     for (i = 0; i < drawSize; i++) {
         glPushMatrix();
-        color[0] = m_Spheres[i].m_color.r; color[1] = m_Spheres[i].m_color.g; color[2] = m_Spheres[i].m_color.b;
-        color[3] = 1;
-        glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
-        //glColor3f(m_Spheres[i].m_color.r, m_Spheres[i].m_color.g, m_Spheres[i].m_color.b);
-        glTranslatef(m_Spheres[i].m_position.x, m_Spheres[i].m_position.y, m_Spheres[i].m_position.z);
+        //glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
+        glColor3f(m_Spheres[i]->m_color.r, m_Spheres[i]->m_color.g, m_Spheres[i]->m_color.b);
+        glTranslatef(m_Spheres[i]->m_position.x, m_Spheres[i]->m_position.y, m_Spheres[i]->m_position.z);
         //gluSphere(gluNewQuadric(), m_Spheres[i].m_radius, 20, 10);
-        glutSolidSphere(m_Spheres[i].m_radius, 200, 10);
+        glutSolidSphere(m_Spheres[i]->m_radius, 200, 10);
         //glTranslatef(-m_Spheres[i].m_position.x, -m_Spheres[i].m_position.y, m_Spheres[i].m_position.z);
         glPopMatrix();
     }
@@ -60,23 +56,21 @@ void Window::update_positions()
     long unsigned int i;
 
     for (i=0; i < m_Spheres.size(); i++) {
-        m_Spheres[i].border_collision();
-        intersphere_collision(m_Spheres);
+        m_Spheres[i]->border_collision();
+        //intersphere_collision(m_Spheres);
         //brownian_sim(m_Spheres[i].m_position, dt, is3D);
-        m_Spheres[i].m_position.x += m_Spheres[i].m_velocity.x*dt;
-        m_Spheres[i].m_position.y += m_Spheres[i].m_velocity.y*dt;
-        m_Spheres[i].m_position.z += m_Spheres[i].m_velocity.z*dt;
+        handleSphereSphereCollisions(m_Spheres);
+        m_Spheres[i]->m_position.x += m_Spheres[i]->m_velocity.x*dt;
+        m_Spheres[i]->m_position.y += m_Spheres[i]->m_velocity.y*dt;
+        m_Spheres[i]->m_position.z += m_Spheres[i]->m_velocity.z*dt;
     }
     if (m_Spheres.size() == 1)
-        brownian_sim(m_Spheres[0].m_position, dt, is3D);
+        brownian_sim(m_Spheres[0]->m_position, dt, is3D);
     time += dt;
 
-    //std::cout << " x: " << m_Spheres[0].m_position.x;
-    //std::cout << " y: " << m_Spheres[0].m_position.y;
-    //std::cout << " z: " << m_Spheres[0].m_position.z << std::endl;
-    m_path.push_back(m_Spheres[0].m_position);
-    //grid_define(m_Spheres, is3D);
+    m_path.push_back(m_Spheres[0]->m_position);
 }
+
 
 void Window::draw_path()
 {
@@ -99,6 +93,7 @@ void Window::set_deltaT(double new_dt)
 Window::Window(bool s_3D)
 {
     is3D = s_3D;
+    outputData = fopen("data", "a");
 
     if (s_3D){
        glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
@@ -176,25 +171,6 @@ void Window::display()
 
 void Window::draw_axes()
 {
-    /*
-  glBegin(GL_LINE_STRIP);
-    glColor3f(0,0,0);
-    glVertex3f(-100,0,0);
-    glVertex3f(100,0,0);
-  glEnd();
-
-  glBegin(GL_LINE_STRIP);
-    glColor3f(0,0,0);
-    glVertex3f(0,-100,0);
-    glVertex3f(0,100,0);
-  glEnd();
-
-  glBegin(GL_LINE_STRIP);
-    glColor3f(0,0,0);
-    glVertex3f(0,0,-100);
-    glVertex3f(0,0,100);
-  glEnd();
-*/
     glBegin(GL_LINE_STRIP);
         glColor3f(0,0,0);
         glVertex3f(-LENGTH,-HEIGHT,DEPTH);
@@ -271,6 +247,7 @@ void Window::display3D()
 
 Window::~Window()
 {
+    fclose(outputData);
     glClear(GL_COLOR_BUFFER_BIT);
     glFlush(); 
     glutSwapBuffers();

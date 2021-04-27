@@ -1,4 +1,4 @@
-#include "datastructures.h"
+#include "vec.h"
 
 vec3 vec3::operator-(vec3 &obj){
     return vec3{this->x - obj.x,this->y - obj.y,this->z - obj.z};
