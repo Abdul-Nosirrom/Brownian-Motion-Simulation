@@ -29,7 +29,7 @@ class Window
 
         Window(bool, int);
 
-        void generate_spheres(int);
+        void generate_spheres(long unsigned int);
 
         void reshape(int, int);
 
@@ -38,6 +38,8 @@ class Window
         void display3D();
 
         void set_deltaT(double new_dt);
+
+        void set_temperature();
 
         void buttons(int selection);
 

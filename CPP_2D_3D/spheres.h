@@ -51,7 +51,7 @@ class Sphere
 };
 
 //std::vector<Sphere> initialize_spheres(int numSpheres);
-void initialize_spheres(std::vector<Sphere*>&, int numSpheres, bool is3D);
+void initialize_spheres(std::vector<Sphere*>&, long unsigned int numSpheres, bool is3D);
 
 
 

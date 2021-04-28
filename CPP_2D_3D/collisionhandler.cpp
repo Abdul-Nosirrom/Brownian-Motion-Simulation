@@ -4,7 +4,6 @@
 void handleSphereSphereCollisions(std::vector<Sphere*> &particles)
 {
     long unsigned int i,j;
-    double dist;
     bool hasCollided;
     std::vector<std::vector<int>> pairs;
 
@@ -20,9 +19,11 @@ void handleSphereSphereCollisions(std::vector<Sphere*> &particles)
 
 bool is_collision(Sphere* p1, Sphere* p2)
 {
-    double r1 = p1->m_radius, r2 = p2->m_radius;
+    //double r1 = p1->m_radius, r2 = p2->m_radius;
+    double r1 = pow(p1->m_radius,2), r2 = pow(p2->m_radius,2);
     vec3 pos1 = p1->m_position, pos2 = p2->m_position;
-    double dist = sqrt(pow(pos1.x - pos2.x,2) + pow(pos1.y - pos2.y,2) + pow(pos1.z - pos2.z,2));
+    //double dist = sqrt(pow(pos1.x - pos2.x,2) + pow(pos1.y - pos2.y,2) + pow(pos1.z - pos2.z,2));
+    double dist = pow(pos1.x - pos2.x,2) + pow(pos1.y - pos2.y,2) + pow(pos1.z - pos2.z,2);
     if (dist <= (r1+r2))
         return true;
     else

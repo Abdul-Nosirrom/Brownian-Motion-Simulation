@@ -10,23 +10,21 @@ void timer( int value )
     glutPostRedisplay();
 }
 
-void Window::generate_spheres(int numSpheres)
+void Window::generate_spheres(long unsigned int numSpheres)
 {
     m_Spheres.reserve(numSpheres);
     initialize_spheres(m_Spheres, numSpheres, is3D);
+    //set_temperature();
 }
 
 void Window::draw_spheres2D()
 {
     long unsigned int i = 0;
-    float color[4];
-    int drawSize = showParticles ? m_Spheres.size() : 1;
+    long unsigned int drawSize = showParticles ? m_Spheres.size() : 1;
     for (i = 0; i < drawSize; i++) {
         glColor3f(m_Spheres[i]->m_color.r, m_Spheres[i]->m_color.g, m_Spheres[i]->m_color.b);
-        //glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
         glTranslatef(m_Spheres[i]->m_position.x, m_Spheres[i]->m_position.y, 0);
-        //gluDisk(gluNewQuadric(), 0.0, m_Spheres[i].m_radius, 20, 10);
-        gluSphere(gluNewQuadric(), m_Spheres[i]->m_radius, 20, 10);
+        glutSolidSphere(m_Spheres[i]->m_radius, 200, 10);
         glTranslatef(-m_Spheres[i]->m_position.x, -m_Spheres[i]->m_position.y, 0);
     }
 }
@@ -34,17 +32,12 @@ void Window::draw_spheres2D()
 void Window::draw_spheres3D()
 {
     long unsigned int i = 0;
-    GLUquadric *quad;
-    float color[4]; 
-    int drawSize = showParticles ? m_Spheres.size() : 1;
+    long unsigned int drawSize = showParticles ? m_Spheres.size() : 1;
     for (i = 0; i < drawSize; i++) {
         glPushMatrix();
-        //glMaterialfv(GL_FRONT, GL_DIFFUSE, color);
         glColor3f(m_Spheres[i]->m_color.r, m_Spheres[i]->m_color.g, m_Spheres[i]->m_color.b);
         glTranslatef(m_Spheres[i]->m_position.x, m_Spheres[i]->m_position.y, m_Spheres[i]->m_position.z);
-        //gluSphere(gluNewQuadric(), m_Spheres[i].m_radius, 20, 10);
         glutSolidSphere(m_Spheres[i]->m_radius, 200, 10);
-        //glTranslatef(-m_Spheres[i].m_position.x, -m_Spheres[i].m_position.y, m_Spheres[i].m_position.z);
         glPopMatrix();
     }
 }
@@ -52,7 +45,6 @@ void Window::draw_spheres3D()
 void Window::update_positions()
 {
     static double time = 0;
-    float vel = 2;
     long unsigned int i;
 
     for (i=0; i < m_Spheres.size(); i++) {
@@ -67,6 +59,8 @@ void Window::update_positions()
     if (m_Spheres.size() == 1)
         brownian_sim(m_Spheres[0]->m_position, dt, is3D);
     time += dt;
+
+    fprintf(outputData, "%lf %lf %lf\n", time, m_Spheres[0]->m_position.x, m_Spheres[0]->m_position.y);
 
     m_path.push_back(m_Spheres[0]->m_position);
 }
@@ -87,6 +81,22 @@ void Window::draw_path()
 void Window::set_deltaT(double new_dt)
 {
     this->dt = new_dt;
+}
+
+void Window::set_temperature()
+{
+    GLfloat T, vel;
+    std::cout << "Enter Temperature: ";
+    std::cin >> T;
+    long unsigned int iter;
+    for (iter=0; iter < m_Spheres.size(); iter++)
+    {
+        vel = boltz(T);
+        m_Spheres[iter]->m_velocity = (m_Spheres[iter]->m_velocity.normalized())*vel;
+        std::cout << m_Spheres[iter]->m_velocity.x <<" "<< m_Spheres[iter]->m_velocity.y <<" "<< m_Spheres[iter]->m_velocity.z << std::endl;
+    }
+
+    
 }
 
 

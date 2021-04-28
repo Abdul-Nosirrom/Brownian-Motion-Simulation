@@ -25,12 +25,15 @@ void buttons(int selection)
 {
     switch(selection) {
         case 1:
-            brownian->showParticles = false;
+            brownian->set_temperature();
             break;
         case 2:
-            brownian->showParticles = true;
+            brownian->showParticles = false;
             break;
         case 3:
+            brownian->showParticles = true;
+            break;
+        case 4:
             brownian->~Window();
             break;
     }
@@ -38,7 +41,7 @@ void buttons(int selection)
 int main(int argc, char *argv[]) 
 {
     int is3D;
-    int numSpheres;
+    long unsigned int numSpheres;
     double dt;
     // Take User Input
     std::cout << "Simulate 3D (1) or 2D (0) ?" << std::endl;
@@ -65,9 +68,10 @@ int main(int argc, char *argv[])
         glutIdleFunc(display);
     }  
     glutCreateMenu(buttons);
-    glutAddMenuEntry("Hide Particles", 1);
-    glutAddMenuEntry("Show Particles", 2);
-    glutAddMenuEntry("Exit", 3);
+    glutAddMenuEntry("Change Temperature", 1);
+    glutAddMenuEntry("Hide Particles", 2);
+    glutAddMenuEntry("Show Particles", 3);
+    glutAddMenuEntry("Exit", 4);
     glutAttachMenu(GLUT_LEFT_BUTTON);
                       
     glutMainLoop();  

@@ -7,7 +7,8 @@ bool Sphere::operator==(const Sphere& s2) {
     return (m_radius == s2.m_radius && m_position.x == s2.m_position.x 
             && m_position.y == s2.m_position.y && m_position.z == s2.m_position.z);}
 
-void initialize_spheres(std::vector<Sphere*>& spheresGL, int numSpheres, bool is3D)
+
+void initialize_spheres(std::vector<Sphere*>& spheresGL, long unsigned int numSpheres, bool is3D)
 {
     Sphere *sphereStack;
     vec3 posRandomizer;
@@ -25,7 +26,7 @@ void initialize_spheres(std::vector<Sphere*>& spheresGL, int numSpheres, bool is
     else particleColor = {0.0, 0.0, 0.0};
 
     long unsigned int i;
-    float x=-LENGTH + rad,y=-HEIGHT + rad,z=-DEPTH + rad;
+    float x=-LENGTH + rad,y=-HEIGHT + rad;//z=-DEPTH + rad;
 
     sphereStack = new Sphere(mainRadius, {1,0,0});
     spheresGL.push_back(sphereStack);
@@ -45,8 +46,10 @@ void initialize_spheres(std::vector<Sphere*>& spheresGL, int numSpheres, bool is
     } */
     if (is3D) {
      for (i=0; i<numSpheres; i++) {
-        velRandomizer = {rand()%(VEL)-VEL, rand()%(VEL)-VEL, rand()%(VEL)-VEL};
-        posRandomizer = {rand()%(2*(LENGTH-1))-LENGTH+1, rand()%(2*(HEIGHT-1))-(HEIGHT-1), rand()%(2*(DEPTH-1)+1-DEPTH)};
+        velRandomizer = {get_random(-1,1), get_random(-1,1), get_random(-1,1)};
+        velRandomizer = velRandomizer.normalized();
+        std::cout << velRandomizer.x << velRandomizer.y << velRandomizer.z <<std::endl;
+        posRandomizer = {get_random(-LENGTH,LENGTH), get_random(-HEIGHT,HEIGHT), get_random(-DEPTH,DEPTH)};
 
         //velRandomizer = {0,0,0};
         sphereStack = new Sphere(rad, particleColor, posRandomizer, velRandomizer);
@@ -59,9 +62,8 @@ void initialize_spheres(std::vector<Sphere*>& spheresGL, int numSpheres, bool is
                 if (spheresGL.size() >= numSpheres) break;
                 
                 posDistr = {x,y,0};
-
-                //velRandomizer = {0, 0, 0};
-                velRandomizer = {rand()%(VEL)-VEL, rand()%(VEL)-VEL, 0};
+                velRandomizer = {get_random(-1,1), get_random(-1,1), 0};
+                velRandomizer = velRandomizer.normalized();
                 sphereStack = new Sphere(rad, particleColor, posDistr, velRandomizer);
                 spheresGL.push_back(sphereStack);
             }
