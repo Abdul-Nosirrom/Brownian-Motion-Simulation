@@ -1,7 +1,0 @@
-CC = gcc
-Lib = -lm -lGL -lGLU -lglut
-GDB = -g -Wall -Wextra
-SRCDIR = ./C_2D
-
-./brown2d: $(SRCDIR)/main.c
-	$(CC) $(SRCDIR)/main.c $(SRCDIR)/spheres.c $(SRCDIR)/linkedlist.c -o brown2d $(Lib) $(GDB)

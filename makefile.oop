@@ -1,8 +1,0 @@
-CC = g++
-Lib = -lm -lGL -lGLU -lglut
-GDB = -g -Wall -Wextra
-SRC = ./CPP_2D_3D/main.cpp ./CPP_2D_3D/window.cpp
-SRCDIR = ./CPP_2D_3D
-
-./brown: $(SRCDIR)/main.cpp
-	$(CC) $(SRC) -o brown $(Lib) $(GDB)
