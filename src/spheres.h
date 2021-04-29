@@ -2,12 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-#include <math.h>
 #include <vector>
-#include <unordered_set>
 #include <memory>
 #include "browniansim.h"
 
@@ -40,7 +35,6 @@ class Sphere
         void border_collision();
         ~Sphere();
         bool operator== (const Sphere& s);
-        //void grid_define(Sphere&);
         float minx();
         float maxx();
         float miny();
@@ -50,7 +44,6 @@ class Sphere
 
 };
 
-//std::vector<Sphere> initialize_spheres(int numSpheres);
 void initialize_spheres(std::vector<Sphere*>&, long unsigned int numSpheres, bool is3D);
 
 

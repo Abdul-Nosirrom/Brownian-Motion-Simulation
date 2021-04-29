@@ -1,5 +1,4 @@
 #include "spheres.h"
-#include <iostream>
 #include <algorithm>
 
 // Operator overload
@@ -12,10 +11,10 @@ void initialize_spheres(std::vector<Sphere*>& spheresGL, long unsigned int numSp
 {
     Sphere *sphereStack;
     vec3 posRandomizer;
-    vec3 posDistr;
     vec3 velRandomizer;
     color particleColor;
 
+    float velMag;
     float mainRadius = 3;
     float rad = 0.8;
 
@@ -28,13 +27,13 @@ void initialize_spheres(std::vector<Sphere*>& spheresGL, long unsigned int numSp
     spheresGL.push_back(sphereStack);
   
     for (i=0; i<numSpheres; i++) {
+        velMag = boltz(DEFAULT_TEMP);
         velRandomizer = {get_random(1), get_random(1), get_random(1)};
-        velRandomizer = velRandomizer.normalized();
-        posRandomizer = {get_random(LENGTH), get_random(HEIGHT), get_random(DEPTH)};
+        velRandomizer = velRandomizer.normalized()*velMag;
+        posRandomizer = {get_random(LENGTH-rad), get_random(HEIGHT-rad), get_random(DEPTH-rad)};
         if (!is3D) {
             posRandomizer.z = 0; velRandomizer.z = 0;
         }
-        std::cout << posRandomizer.x << posRandomizer.y << posRandomizer.z <<std::endl;
         sphereStack = new Sphere(rad, particleColor, posRandomizer, velRandomizer);
         spheresGL.push_back(sphereStack);
      
@@ -81,7 +80,7 @@ Sphere::Sphere(GLfloat newRadius, color newColor, vec3 initPos, vec3 initVel)
 /////////////////////////////////
 Sphere::~Sphere() {}
 
-/* Collision Getters */
+/* Collision Getters for Sweep & Prune */
 float Sphere::minx(){return this->m_position.x - this->m_radius;}
 float Sphere::maxx(){return this->m_position.x + this->m_radius;}
 float Sphere::miny(){return this->m_position.y - this->m_radius;}

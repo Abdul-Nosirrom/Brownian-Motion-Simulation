@@ -5,7 +5,11 @@ void initialize_scale_factor()
 {
     std::cout << "Input Collision Detection Scaling: " << std::endl;
     std::cin >> scaleFactor;
+
+    // Ensure scale factor is clamped between [1,infinity)
+    scaleFactor = scaleFactor >= 1 ? scaleFactor : 1;
 }
+
 void handleSphereSphereCollisions(std::vector<Sphere*> &particles)
 {
     long unsigned int i,j;
@@ -27,7 +31,6 @@ bool is_collision(Sphere* p1, Sphere* p2)
     double r1 = pow(p1->m_radius,2), r2 = pow(p2->m_radius,2);
     vec3 pos1 = p1->m_position, pos2 = p2->m_position;
     double dist = pow(pos1.x - pos2.x,2) + pow(pos1.y - pos2.y,2) + pow(pos1.z - pos2.z,2);
-    // Maybe add a scale factor here? Tried 10*r2 at 350 particles and it looked great
     if (dist <= (r1+scaleFactor*r2))
         return true;
     else

@@ -1,10 +1,6 @@
-#include <iostream>
-#include <string.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
-#include <vector>
-#include <list>
 #include <memory>
 #include <thread> // So we can dynamically update temperature without halting
 
@@ -23,12 +19,11 @@ class Window
         std::vector<Sphere*> m_Spheres;
         std::vector<vec3> m_path;
         bool showParticles = false;
+        bool generateDataFile;
         
 
     public:
-        Window(bool);
-
-        Window(bool, int);
+        Window(bool, bool);
 
         void generate_spheres(long unsigned int);
 

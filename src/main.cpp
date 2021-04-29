@@ -2,18 +2,15 @@
 #include "window.h"
 
 Window *brownian;
-//std::vector<Sphere> allSpheres;
 
 void display()
 {
     brownian->display();
-    //brownian->draw_spheres2D(allSpheres);
 }
 
 void display3D()
 {
     brownian->display3D();
-    //brownian->draw_spheres3D(allSpheres);
 }
 
 void reshape(int w, int h)
@@ -40,11 +37,12 @@ void buttons(int selection)
 }
 int main(int argc, char *argv[]) 
 {
-    INITIALIZE:
-    int is3D;
+    int is3D, dataFile;
     long unsigned int numSpheres;
     double dt;
     // Take User Input
+    std::cout << "Generate data file (1) or not (0) ?" << std::endl;
+    std::cin >> dataFile;
     std::cout << "Simulate 3D (1) or 2D (0) ?" << std::endl;
     std::cin >> is3D;
     std::cout << "Enter number of particles in the system:" << std::endl;
@@ -56,7 +54,7 @@ int main(int argc, char *argv[])
     
     // Initialize window and openGL
     glutInit(&argc, argv);
-    brownian = new Window(is3D);
+    brownian = new Window(is3D, dataFile);
     // Initialize particles
     brownian->generate_spheres(numSpheres);
     brownian->set_deltaT(dt);
@@ -78,6 +76,5 @@ int main(int argc, char *argv[])
     glutAttachMenu(GLUT_LEFT_BUTTON);
                       
     glutMainLoop();  
-    // Add deconstructors here 
     return 0;
 }

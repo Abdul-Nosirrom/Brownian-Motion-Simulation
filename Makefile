@@ -4,7 +4,7 @@
 F90 = gfortran
 CC = g++
 Lib =  -lm -lGL -lGLU -lglut -pthread
-GDB =  -pg -Wall -Wextra -O3
+GDB =  -pg -O3
 SRC = $(SRCDIR)/browniansim.cpp $(SRCDIR)/main.cpp $(SRCDIR)/window.cpp $(SRCDIR)/spheres.cpp $(SRCDIR)/vec.cpp $(SRCDIR)/collisionhandler.cpp
 SRCDIR = ./src
 
