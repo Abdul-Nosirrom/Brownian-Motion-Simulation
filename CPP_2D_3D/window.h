@@ -6,12 +6,12 @@
 #include <vector>
 #include <list>
 #include <memory>
+#include <thread> // So we can dynamically update temperature without halting
 
 #include "collisionhandler.h"
 
 
 void timer();
-
 
 
 class Window 
@@ -23,6 +23,7 @@ class Window
         std::vector<Sphere*> m_Spheres;
         std::vector<vec3> m_path;
         bool showParticles = false;
+        
 
     public:
         Window(bool);
@@ -43,7 +44,11 @@ class Window
 
         void buttons(int selection);
 
+
         ~Window();
+
+        
+
 
     private:
         void draw_spheres2D();
@@ -56,8 +61,12 @@ class Window
 
         void draw_axes();
 
+        void init_lighting();
+
         FILE* outputData;
 
 
 
 };
+
+

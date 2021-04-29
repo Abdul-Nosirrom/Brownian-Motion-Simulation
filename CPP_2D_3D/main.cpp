@@ -40,6 +40,7 @@ void buttons(int selection)
 }
 int main(int argc, char *argv[]) 
 {
+    INITIALIZE:
     int is3D;
     long unsigned int numSpheres;
     double dt;
@@ -50,7 +51,9 @@ int main(int argc, char *argv[])
     std::cin >> numSpheres;
     std::cout << "Set a delta t value (default 0.1): " << std::endl;
     std::cin >> dt;
+    initialize_scale_factor();
 
+    
     // Initialize window and openGL
     glutInit(&argc, argv);
     brownian = new Window(is3D);

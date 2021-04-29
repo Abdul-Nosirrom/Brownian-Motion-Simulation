@@ -1,6 +1,8 @@
 #include "window.h"
 //#include "base.h"
-
+GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+GLfloat mat_shininess[] = { 50.0 };
+GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
 double angle = 0.0;
 void timer( int value )
 {
@@ -24,7 +26,8 @@ void Window::draw_spheres2D()
     for (i = 0; i < drawSize; i++) {
         glColor3f(m_Spheres[i]->m_color.r, m_Spheres[i]->m_color.g, m_Spheres[i]->m_color.b);
         glTranslatef(m_Spheres[i]->m_position.x, m_Spheres[i]->m_position.y, 0);
-        glutSolidSphere(m_Spheres[i]->m_radius, 200, 10);
+        gluDisk(gluNewQuadric(),0, m_Spheres[i]->m_radius, 200,10);
+        //glutSolidSphere(m_Spheres[i]->m_radius, 200, 10);
         glTranslatef(-m_Spheres[i]->m_position.x, -m_Spheres[i]->m_position.y, 0);
     }
 }
@@ -37,7 +40,7 @@ void Window::draw_spheres3D()
         glPushMatrix();
         glColor3f(m_Spheres[i]->m_color.r, m_Spheres[i]->m_color.g, m_Spheres[i]->m_color.b);
         glTranslatef(m_Spheres[i]->m_position.x, m_Spheres[i]->m_position.y, m_Spheres[i]->m_position.z);
-        glutSolidSphere(m_Spheres[i]->m_radius, 200, 10);
+        glutSolidSphere(m_Spheres[i]->m_radius, 20, 10);
         glPopMatrix();
     }
 }
@@ -59,9 +62,6 @@ void Window::update_positions()
     if (m_Spheres.size() == 1)
         brownian_sim(m_Spheres[0]->m_position, dt, is3D);
     time += dt;
-
-    fprintf(outputData, "%lf %lf %lf\n", time, m_Spheres[0]->m_position.x, m_Spheres[0]->m_position.y);
-
     m_path.push_back(m_Spheres[0]->m_position);
 }
 
@@ -69,7 +69,6 @@ void Window::update_positions()
 void Window::draw_path()
 {
     long unsigned int i;
-
     glBegin(GL_LINE_STRIP);
     glColor3f(0.0,1.0,0.0);
     for (i=0; i < m_path.size(); i++){
@@ -85,11 +84,12 @@ void Window::set_deltaT(double new_dt)
 
 void Window::set_temperature()
 {
+
     GLfloat T, vel;
     std::cout << "Enter Temperature: ";
     std::cin >> T;
     long unsigned int iter;
-    for (iter=0; iter < m_Spheres.size(); iter++)
+    for (iter=1; iter < m_Spheres.size(); iter++)
     {
         vel = boltz(T);
         m_Spheres[iter]->m_velocity = (m_Spheres[iter]->m_velocity.normalized())*vel;
@@ -99,6 +99,16 @@ void Window::set_temperature()
     
 }
 
+void Window::init_lighting()
+{
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_DEPTH_TEST);         // Allow depth buffer
+    glEnable(GL_COLOR_MATERIAL); 
+    glColorMaterial(GL_FRONT, GL_DIFFUSE);
+}
 
 Window::Window(bool s_3D)
 {
@@ -106,7 +116,7 @@ Window::Window(bool s_3D)
     outputData = fopen("data", "a");
 
     if (s_3D){
-       glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+        glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
   
         glutInitWindowSize(800,600);
         glutInitWindowPosition(50,50);
@@ -122,11 +132,12 @@ Window::Window(bool s_3D)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         gluLookAt(40,40,40,0,0,0,0,0,1); // Change screen size
-        //glEnable(GL_LIGHTING);
-        //glEnable(GL_NORMALIZE);
+        glShadeModel (GL_SMOOTH);
+
         glutTimerFunc(0,timer,0);
         glEnable(GL_LINE_SMOOTH);                     // Basically anti-aliasing?
         glLineWidth(3.0); 
+        
     }
 
     else{
@@ -144,13 +155,13 @@ Window::Window(bool s_3D)
                                                 // specified parameters
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();  
-        //glEnable(GL_LIGHTING);                       // Disable because 2D
-        glDisable(GL_LIGHTING);
-        //glEnable(GL_NORMALIZE);
         glEnable(GL_LINE_SMOOTH);                     // Basically anti-aliasing?
         glLineWidth(0.1);     
 
     }
+
+    // Initiate temperature change thread
+    this->init_lighting();
 
 }
 

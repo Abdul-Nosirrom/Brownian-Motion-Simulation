@@ -1,22 +1,28 @@
 //#include "browniansim.h"
 #include "browniansim.h"
 
+std::default_random_engine generator;
+std::normal_distribution<float> distribution(0,1);
+
 void brownian_sim(vec3& position, double dt, bool is3D)
 {
-    // Check for collision, if none do the below
+
     float rand_norm;
     static double totalTime = 0;
-    double dx, dy, dz = 0;
-    gaussian_(&rand_norm);
+    double dx, dy, dz;
+    rand_norm = distribution(generator);
+    //gaussian_(&rand_norm);
     dx = sqrt(dt) * rand_norm;
     position.x += dx;
     totalTime += dt;
-    gaussian_(&rand_norm);
+    //gaussian_(&rand_norm);
+    rand_norm = distribution(generator);
     dy = sqrt(dt) * rand_norm;
     position.y += dy;
 
     if (is3D) {
-        gaussian_(&rand_norm);
+        //gaussian_(&rand_norm);
+        rand_norm = distribution(generator);
         dz = sqrt(dt) * rand_norm;
         position.z += dx;
     }
@@ -36,9 +42,9 @@ float boltz (float T)
     return maxwell(generator);
 }
 
-float get_random(int min, int max)
+float get_random(int max)
 {
     static std::default_random_engine e;
-    static std::uniform_real_distribution<> dis(min,max); // rage -1 -> 1
-    return dis(e);
+    static std::uniform_real_distribution<> dis(-1,1); // rage -1 -> 1
+    return max*dis(e);
 }

@@ -19,55 +19,25 @@ void initialize_spheres(std::vector<Sphere*>& spheresGL, long unsigned int numSp
     float mainRadius = 3;
     float rad = 0.8;
 
-    float spacing = LENGTH/sqrt(numSpheres);
-    if (is3D) spacing = LENGTH/(pow(numSpheres, 1/3));
-
     if (!is3D) particleColor = {1.0,1.0,1.0};
-    else particleColor = {0.0, 0.0, 0.0};
+    else particleColor = {0, 0.2, 0.4};
 
     long unsigned int i;
-    float x=-LENGTH + rad,y=-HEIGHT + rad;//z=-DEPTH + rad;
 
     sphereStack = new Sphere(mainRadius, {1,0,0});
     spheresGL.push_back(sphereStack);
-
-    //std::cout << spheresGL.capacity() <<std::endl;
-    /*for (i=0; i<numSpheres; i++) {
-        velRandomizer = {rand()%(VEL)-VEL, rand()%(VEL)-VEL, rand()%(VEL)-VEL};
-        posRandomizer = {rand()%(2*(LENGTH-1))-LENGTH+1, rand()%(2*(HEIGHT-1))-(HEIGHT-1), rand()%(2*(DEPTH-1)+1-DEPTH)};
-        if (!is3D) {
-            velRandomizer.z = 0;
-            posRandomizer.z = 0;
-        }
-        velRandomizer = {0,0,0};
-        sphereStack = Sphere(0.75, particleColor, posRandomizer, velRandomizer);
-        spheresGL.push_back(sphereStack);
-        //delete sphereStack;
-    } */
-    if (is3D) {
-     for (i=0; i<numSpheres; i++) {
-        velRandomizer = {get_random(-1,1), get_random(-1,1), get_random(-1,1)};
+  
+    for (i=0; i<numSpheres; i++) {
+        velRandomizer = {get_random(1), get_random(1), get_random(1)};
         velRandomizer = velRandomizer.normalized();
-        std::cout << velRandomizer.x << velRandomizer.y << velRandomizer.z <<std::endl;
-        posRandomizer = {get_random(-LENGTH,LENGTH), get_random(-HEIGHT,HEIGHT), get_random(-DEPTH,DEPTH)};
-
-        //velRandomizer = {0,0,0};
+        posRandomizer = {get_random(LENGTH), get_random(HEIGHT), get_random(DEPTH)};
+        if (!is3D) {
+            posRandomizer.z = 0; velRandomizer.z = 0;
+        }
+        std::cout << posRandomizer.x << posRandomizer.y << posRandomizer.z <<std::endl;
         sphereStack = new Sphere(rad, particleColor, posRandomizer, velRandomizer);
         spheresGL.push_back(sphereStack);
-     }
-
-    } else {
-        for (x=-LENGTH+rad; x < LENGTH-rad; x+=spacing) {
-            for (y=-LENGTH+rad; y < LENGTH-rad; y += spacing) {
-                if (spheresGL.size() >= numSpheres) break;
-                
-                posDistr = {x,y,0};
-                velRandomizer = {get_random(-1,1), get_random(-1,1), 0};
-                velRandomizer = velRandomizer.normalized();
-                sphereStack = new Sphere(rad, particleColor, posDistr, velRandomizer);
-                spheresGL.push_back(sphereStack);
-            }
-        }
+     
     }
 
 }
