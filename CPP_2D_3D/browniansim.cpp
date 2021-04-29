@@ -24,7 +24,7 @@ void brownian_sim(vec3& position, double dt, bool is3D)
         //gaussian_(&rand_norm);
         rand_norm = distribution(generator);
         dz = sqrt(dt) * rand_norm;
-        position.z += dx;
+        position.z += dz;
     }
 }
 

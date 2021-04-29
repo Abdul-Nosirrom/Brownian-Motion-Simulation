@@ -62,6 +62,9 @@ void Window::update_positions()
     if (m_Spheres.size() == 1)
         brownian_sim(m_Spheres[0]->m_position, dt, is3D);
     time += dt;
+    fprintf(outputData, "%lf %lf %lf %lf\n", time,  m_Spheres[0]->m_position.x, 
+                                                    m_Spheres[0]->m_position.y, 
+                                                    m_Spheres[0]->m_position.z);
     m_path.push_back(m_Spheres[0]->m_position);
 }
 
@@ -93,7 +96,6 @@ void Window::set_temperature()
     {
         vel = boltz(T);
         m_Spheres[iter]->m_velocity = (m_Spheres[iter]->m_velocity.normalized())*vel;
-        std::cout << m_Spheres[iter]->m_velocity.x <<" "<< m_Spheres[iter]->m_velocity.y <<" "<< m_Spheres[iter]->m_velocity.z << std::endl;
     }
 
     
@@ -113,7 +115,7 @@ void Window::init_lighting()
 Window::Window(bool s_3D)
 {
     is3D = s_3D;
-    outputData = fopen("data", "a");
+    outputData = fopen("data", "w");
 
     if (s_3D){
         glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
