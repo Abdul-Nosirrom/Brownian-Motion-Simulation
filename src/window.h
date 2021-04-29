@@ -2,7 +2,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <memory>
-#include <thread> // So we can dynamically update temperature without halting
+#include <thread> 
 
 #include "collisionhandler.h"
 
@@ -14,12 +14,14 @@ class Window
 {
     bool is3D;
     double dt;
+    bool generateDataFile;
+    FILE* outputData;
 
     public:
         std::vector<Sphere*> m_Spheres;
         std::vector<vec3> m_path;
         bool showParticles = false;
-        bool generateDataFile;
+        
         
 
     public:
@@ -58,7 +60,7 @@ class Window
 
         void init_lighting();
 
-        FILE* outputData;
+        
 
 
 

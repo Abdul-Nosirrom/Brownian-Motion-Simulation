@@ -1,5 +1,5 @@
 .KEEP_STATE:
-.SUFFIXES: .o .f90 .cpp
+.SUFFIXES: .o .cpp
 
 F90 = gfortran
 CC = g++

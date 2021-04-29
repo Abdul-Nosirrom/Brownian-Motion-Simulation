@@ -187,7 +187,6 @@ void Window::draw_spheres2D()
         glColor3f(m_Spheres[i]->m_color.r, m_Spheres[i]->m_color.g, m_Spheres[i]->m_color.b);
         glTranslatef(m_Spheres[i]->m_position.x, m_Spheres[i]->m_position.y, 0);
         gluDisk(gluNewQuadric(),0, m_Spheres[i]->m_radius, 200,10);
-        //glutSolidSphere(m_Spheres[i]->m_radius, 200, 10);
         glTranslatef(-m_Spheres[i]->m_position.x, -m_Spheres[i]->m_position.y, 0);
     }
 }
