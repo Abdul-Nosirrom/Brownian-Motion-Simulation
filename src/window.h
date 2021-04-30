@@ -21,6 +21,7 @@ class Window
         std::vector<Sphere*> m_Spheres;
         std::vector<vec3> m_path;
         bool showParticles = false;
+        int numSteps = 5000;
         
         
 

@@ -37,17 +37,22 @@ void buttons(int selection)
 }
 int main(int argc, char *argv[]) 
 {
-    int is3D, dataFile;
+    int is3D, dataFile, nSteps;
     long unsigned int numSpheres;
     double dt;
     // Take User Input
     std::cout << "Generate data file (1) or not (0) ?" << std::endl;
     std::cin >> dataFile;
+    if (dataFile) {
+        std::cout << "Number of steps to record (Rec: 5000)" << std::endl;
+        std::cin >> nSteps;
+    }
+    std::cout << "For data closest to Wiener process when using collision, 2D is recommended" << std::endl;
     std::cout << "Simulate 3D (1) or 2D (0) ?" << std::endl;
     std::cin >> is3D;
-    std::cout << "Enter number of particles in the system:" << std::endl;
+    std::cout << "Enter number of particles in the system (Rec: 350 for 2D, 500 for 3D):" << std::endl;
     std::cin >> numSpheres;
-    std::cout << "Set a delta t value (default 0.1): " << std::endl;
+    std::cout << "Set a delta t value (Rec: 0.05): " << std::endl;
     std::cin >> dt;
     initialize_scale_factor();
 
@@ -58,6 +63,7 @@ int main(int argc, char *argv[])
     // Initialize particles
     brownian->generate_spheres(numSpheres);
     brownian->set_deltaT(dt);
+    if (dataFile) brownian->numSteps = nSteps;
     
     glutReshapeFunc(reshape);
     if (is3D) {

@@ -25,7 +25,7 @@ void Window::set_temperature()
 {
 
     GLfloat T, vel;
-    std::cout << "Enter Temperature: ";
+    std::cout << "Enter Temperature: (Default 273)";
     std::cin >> T;
     long unsigned int iter;
     for (iter=1; iter < m_Spheres.size(); iter++)
@@ -38,7 +38,7 @@ void Window::set_temperature()
 
 void Window::update_positions()
 {
-    static double time = 0;
+    static int curSteps = 0;
     long unsigned int i;
 
     for (i=0; i < m_Spheres.size(); i++) {
@@ -50,12 +50,13 @@ void Window::update_positions()
     }
     if (m_Spheres.size() == 1)
         brownian_sim(m_Spheres[0]->m_position, dt, is3D);
-    time += dt;
-    if (generateDataFile)
-        fprintf(outputData, "%lf %lf %lf %lf\n", time,  m_Spheres[0]->m_position.x, 
-                                                        m_Spheres[0]->m_position.y, 
-                                                        m_Spheres[0]->m_position.z);
+    
+    if (generateDataFile && curSteps <= numSteps)
+        fprintf(outputData, "%d %lf %lf %lf\n", curSteps,   m_Spheres[0]->m_position.x, 
+                                                            m_Spheres[0]->m_position.y, 
+                                                            m_Spheres[0]->m_position.z);
     m_path.push_back(m_Spheres[0]->m_position);
+    curSteps ++;
 }
 
 void Window::set_deltaT(double new_dt)
@@ -142,7 +143,7 @@ void Window::reshape(int w, int h)
 
 void Window::display()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
     glPushMatrix();  
     
     this->draw_spheres2D();
