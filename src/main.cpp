@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     std::cout << "For data closest to Wiener process when using collision, 2D is recommended" << std::endl;
     std::cout << "Simulate 3D (1) or 2D (0) ?" << std::endl;
     std::cin >> is3D;
-    std::cout << "Enter number of particles in the system (Rec: 350 for 2D, 500 for 3D):" << std::endl;
+    std::cout << "Enter number of particles in the system (Rec: 350 for 2D, 500 for 3D), select 0 for Wiener process:" << std::endl;
     std::cin >> numSpheres;
     std::cout << "Set a delta t value (Rec: 0.05): " << std::endl;
     std::cin >> dt;
